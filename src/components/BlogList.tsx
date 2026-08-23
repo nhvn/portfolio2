@@ -1,5 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { ChevronRight } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -20,10 +21,9 @@ interface BlogListProps {
   posts: Post[];
   allPostsCount: number;
   pagination: Pagination;
-  pageSize: number;
 }
 
-export default function BlogList({ posts, allPostsCount, pagination, pageSize }: BlogListProps) {
+export default function BlogList({ posts, allPostsCount, pagination }: BlogListProps) {
   return (
     <section id="blog">
       <BlurFade delay={BLUR_FADE_DELAY}>
@@ -43,16 +43,12 @@ export default function BlogList({ posts, allPostsCount, pagination, pageSize }:
           <BlurFade delay={BLUR_FADE_DELAY * 2}>
             <div className="flex flex-col gap-5">
               {posts.map((post, id) => {
-                const indexNumber = (pagination.page - 1) * pageSize + id + 1;
                 return (
                   <BlurFade delay={BLUR_FADE_DELAY * 3 + id * 0.05} key={post.id}>
                     <a
                       className="flex items-start gap-x-2 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                       href={`/blog/${post.id}`}
                     >
-                      <span className="text-xs font-mono tabular-nums font-medium mt-[5px]">
-                        {String(indexNumber).padStart(2, "0")}.
-                      </span>
                       <div className="flex flex-col gap-y-2 flex-1">
                         <p className="tracking-tight text-lg font-medium">
                           <span className="group-hover:text-foreground transition-colors">
@@ -64,7 +60,7 @@ export default function BlogList({ posts, allPostsCount, pagination, pageSize }:
                           </span>
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          {post.publishedAt}
+                          {formatDate(post.publishedAt)}
                         </p>
                       </div>
                     </a>

@@ -1,0 +1,172 @@
+---
+export const prerender = true;
+import Layout from "@/layouts/Layout.astro";
+import { getCollection, render } from "astro:content";
+import { DATA } from "@/data/resume";
+import { mdxComponents } from "@/mdx-components";
+import { MediaContainer } from "@/components/mdx/media-container";
+import { Badge } from "@/components/ui/badge";
+import { ProjectLinks } from "@/components/project-links";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+export async function getStaticPaths() {
+  const entries = await getCollection("projects");
+  return entries.map((entry) => {
+    const project = DATA.projects.find((p) => p.slug === entry.id);
+    if (!project) {
+      throw new Error(
+        `No DATA.projects entry with slug "${entry.id}" found for src/content/projects/${entry.id}.mdx`
+      );
+    }
+    const index = DATA.projects.indexOf(project);
+    return {
+      params: { slug: entry.id },
+      props: {
+        entry,
+        project,
+        previousProject: index > 0 ? DATA.projects[index - 1] : null,
+        nextProject: index < DATA.projects.length - 1 ? DATA.projects[index + 1] : null,
+      },
+    };
+  });
+}
+
+const { entry, project, previousProject, nextProject } = Astro.props;
+const { role, team, duration, contributions } = entry.data;
+const slug = entry.id;
+
+const { Content } = await render(entry);
+---
+
+<Layout
+  title={project.title}
+  description={project.description}
+  image={project.image}
+  canonicalURL={`${DATA.url}/projects/${slug}`}
+>
+  <section id="project">
+    <div class="flex justify-start gap-4 items-center">
+      <a
+        href="/#projects"
+        class="text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg px-2 py-1 inline-flex items-center gap-1 mb-6 group"
+        aria-label="Back to Projects"
+      >
+        <ChevronLeft
+          className="size-3 group-hover:-translate-x-px transition-transform"
+        />
+        Back to Projects
+      </a>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h1
+        class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight"
+      >
+        {project.title}
+      </h1>
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+        <span>{duration || project.dates}</span>
+        {role && (
+          <>
+            <span aria-hidden>&middot;</span>
+            <span>{role}</span>
+          </>
+        )}
+        {team && (
+          <>
+            <span aria-hidden>&middot;</span>
+            <span>{team}</span>
+          </>
+        )}
+      </div>
+
+      {project.technologies && project.technologies.length > 0 && (
+        <div class="flex flex-wrap gap-1.5">
+          {project.technologies.map((tech: string) => (
+            <Badge variant="outline" className="text-[11px] font-medium">
+              {tech}
+            </Badge>
+          ))}
+        </div>
+      )}
+
+      <ProjectLinks links={project.links} />
+    </div>
+
+    {project.image && (
+      <div class="mt-6">
+        <MediaContainer
+          src={project.image}
+          alt={project.title}
+          className="h-64 md:h-80"
+        />
+      </div>
+    )}
+
+    {contributions && contributions.length > 0 && (
+      <div class="mt-8 border border-border rounded-xl p-5">
+        <h2 class="text-sm font-semibold mb-3">Contributions</h2>
+        <ul class="list-disc pl-5 flex flex-col gap-1.5 text-sm text-muted-foreground">
+          {contributions.map((item: string) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    <div
+      class="my-6 flex w-full items-center"
+      style="mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);"
+    >
+      <div class="flex-1 h-px bg-border"></div>
+    </div>
+
+    <article
+      class="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert"
+    >
+      <Content components={mdxComponents} />
+    </article>
+
+    <nav class="mt-12 pt-8 max-w-2xl">
+      <div class="flex flex-col sm:flex-row justify-between gap-4">
+        {
+          previousProject ? (
+            <a
+              href={`/projects/${previousProject.slug}`}
+              class="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors"
+            >
+              <span class="flex items-center gap-1 text-xs text-muted-foreground">
+                <ChevronLeft className="size-3" />
+                Previous
+              </span>
+              <span class="text-sm font-medium group-hover:text-foreground transition-colors whitespace-normal wrap-break-word">
+                {previousProject.title}
+              </span>
+            </a>
+          ) : (
+            <div class="hidden sm:block flex-1" />
+          )
+        }
+
+        {
+          nextProject ? (
+            <a
+              href={`/projects/${nextProject.slug}`}
+              class="group flex-1 flex flex-col gap-1 p-4 rounded-lg border border-border hover:bg-accent/50 transition-colors text-right"
+            >
+              <span class="flex items-center justify-end gap-1 text-xs text-muted-foreground">
+                Next
+                <ChevronRight className="size-3" />
+              </span>
+              <span class="text-sm font-medium group-hover:text-foreground transition-colors whitespace-normal wrap-break-word">
+                {nextProject.title}
+              </span>
+            </a>
+          ) : (
+            <div class="hidden sm:block flex-1" />
+          )
+        }
+      </div>
+    </nav>
+  </section>
+</Layout>

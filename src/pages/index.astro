@@ -2,8 +2,21 @@
 export const prerender = true;
 import Layout from "../layouts/Layout.astro";
 import HomePage from "@/components/HomePage";
+import { getCollection } from "astro:content";
+
+const allPosts = await getCollection("blog");
+const sortedPosts = [...allPosts].sort((a, b) => {
+  if (new Date(a.data.publishedAt) > new Date(b.data.publishedAt)) return -1;
+  return 1;
+});
+
+const posts = sortedPosts.slice(0, 3).map((post) => ({
+  id: post.id,
+  title: post.data.title,
+  publishedAt: post.data.publishedAt,
+}));
 ---
 
 <Layout>
-  <HomePage client:only="react" />
+  <HomePage client:only="react" posts={posts} />
 </Layout>

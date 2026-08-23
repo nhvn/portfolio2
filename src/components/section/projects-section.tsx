@@ -1,48 +1,43 @@
+import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import BlurFade from "@/components/magicui/blur-fade";
 import { ProjectCard } from "@/components/project-card";
 import { DATA } from "@/data/resume";
+import { HERO_REVEAL_DELAY } from "@/lib/hero-timing";
+import { ChevronDown } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
+const VISIBLE_COUNT = 4;
 
 export default function ProjectsSection() {
+    const [expanded, setExpanded] = useState(false);
+    const visibleProjects = DATA.projects.slice(0, VISIBLE_COUNT);
+    const extraProjects = DATA.projects.slice(VISIBLE_COUNT);
+    const hasMore = extraProjects.length > 0;
+
     return (
         <section id="projects">
-            <div className="flex min-h-0 flex-col gap-y-8">
-                <div className="flex flex-col gap-y-4 items-center justify-center">
-                    <div className="flex items-center w-full">
-                        <div
-                            className="flex-1 h-px bg-linear-to-r from-transparent from-5% via-border via-95% to-transparent"
-
-                        />
-                        <div className="border bg-primary z-10 rounded-xl px-4 py-1">
-                            <span className="text-background text-sm font-medium">{DATA.sections.projects.label}</span>
-                        </div>
-                        <div
-                            className="flex-1 h-px bg-linear-to-l from-transparent from-5% via-border via-95% to-transparent"
-
-                        />
-                    </div>
-                    <div className="flex flex-col gap-y-3 items-center justify-center">
-                        <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">{DATA.sections.projects.heading}</h2>
-                        <p className="text-muted-foreground md:text-lg/relaxed lg:text-base/relaxed xl:text-lg/relaxed text-balance text-center">
-                            {DATA.sections.projects.text}
-                        </p>
-                    </div>
+            <div className="flex min-h-0 flex-col gap-y-6">
+                <div className="flex flex-col gap-y-3">
+                    <h2 className="text-xl font-bold">{DATA.sections.projects.label}</h2>
+                    <p className="text-muted-foreground text-balance">
+                        {DATA.sections.projects.text}
+                    </p>
                 </div>
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 max-w-[800px] mx-auto auto-rows-fr">
-                    {DATA.projects.map((project, id) => (
+                <div className="grid grid-cols-2 gap-3 max-w-[800px] w-full mx-auto">
+                    {visibleProjects.map((project, id) => (
                         <BlurFade
                             key={project.title}
-                            delay={BLUR_FADE_DELAY * 12 + id * 0.05}
+                            delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
                             className="h-full"
                         >
                             <ProjectCard
                                 href={project.href}
+                                slug={project.slug}
                                 key={project.title}
                                 title={project.title}
-                                description={project.description}
+                                blurb={project.blurb}
                                 dates={project.dates}
-                                tags={project.technologies}
                                 image={project.image}
                                 video={project.video}
                                 links={project.links}
@@ -50,8 +45,48 @@ export default function ProjectsSection() {
                         </BlurFade>
                     ))}
                 </div>
+                <AnimatePresence initial={false}>
+                    {expanded && (
+                        <motion.div
+                            key="extra-projects"
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.35, ease: "easeInOut" }}
+                            className="overflow-hidden max-w-[800px] w-full mx-auto"
+                        >
+                            <div className="grid grid-cols-2 gap-3 pt-3">
+                                {extraProjects.map((project) => (
+                                    <ProjectCard
+                                        href={project.href}
+                                        slug={project.slug}
+                                        key={project.title}
+                                        title={project.title}
+                                        blurb={project.blurb}
+                                        dates={project.dates}
+                                        image={project.image}
+                                        video={project.video}
+                                        links={project.links}
+                                    />
+                                ))}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+                {hasMore && (
+                    <button
+                        type="button"
+                        onClick={() => setExpanded((v) => !v)}
+                        className="mx-auto flex items-center gap-1.5 text-sm font-medium border border-border rounded-xl px-4 py-1.5 hover:bg-muted/60 transition-colors cursor-pointer"
+                    >
+                        {expanded ? "Show less" : "Show more projects"}
+                        <ChevronDown
+                            className={`size-3.5 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                            aria-hidden
+                        />
+                    </button>
+                )}
             </div>
         </section>
     );
 }
-

@@ -2,22 +2,20 @@
 
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight } from "lucide-react";
 import { useState } from "react";
-import Markdown from "react-markdown";
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
   const [imageError, setImageError] = useState(false);
 
   if (!src || imageError) {
-    return <div className="w-full h-48 bg-muted" />;
+    return <div className="w-full h-full bg-muted" />;
   }
 
   return (
     <img
       src={src}
       alt={alt}
-      className="w-full h-48 object-cover"
+      className="w-full h-full object-cover"
       onError={() => setImageError(true)}
     />
   );
@@ -26,9 +24,9 @@ function ProjectImage({ src, alt }: { src: string; alt: string }) {
 interface Props {
   title: string;
   href?: string;
-  description: string;
+  slug?: string;
+  blurb?: string;
   dates: string;
-  tags: readonly string[];
   image?: string;
   video?: string;
   links?: readonly {
@@ -42,98 +40,75 @@ interface Props {
 export function ProjectCard({
   title,
   href,
-  description,
+  slug,
+  blurb,
   dates,
-  tags,
   image,
   video,
   links,
   className,
 }: Props) {
+  const detailHref = slug ? `/projects/${slug}` : href || "#";
+  const isInternal = Boolean(slug);
+
   return (
     <div
       className={cn(
-        "flex flex-col h-full border border-border rounded-xl overflow-hidden hover:ring-2 cursor-pointer hover:ring-muted transition-all duration-200",
+        "group relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-border",
         className
       )}
     >
-      <div className="relative shrink-0">
-        <a
-          href={href || "#"}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block"
-        >
-          {video ? (
-            <video
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-48 object-cover"
-            />
-          ) : image ? (
-            <ProjectImage src={image} alt={title} />
-          ) : (
-            <div className="w-full h-48 bg-muted" />
+      <a
+        href={detailHref}
+        {...(!isInternal && { target: "_blank", rel: "noopener noreferrer" })}
+        className="absolute inset-0 block"
+        aria-label={title}
+      >
+        {video ? (
+          <video
+            src={video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="w-full h-full object-cover"
+          />
+        ) : image ? (
+          <ProjectImage src={image} alt={title} />
+        ) : (
+          <div className="w-full h-full bg-muted" />
+        )}
+
+        <div className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-4 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+          <h3 className="text-sm font-semibold text-white leading-tight">{title}</h3>
+          <time className="text-[11px] text-white/70">{dates}</time>
+          {blurb && (
+            <p className="text-xs text-white/85 leading-snug mt-1">{blurb}</p>
           )}
-        </a>
-        {links && links.length > 0 && (
-          <div className="absolute top-2 right-2 flex flex-wrap gap-2">
-            {links.map((link, idx) => (
-              <a
-                href={link.href}
-                key={idx}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e: React.MouseEvent) => e.stopPropagation()}
-              >
-                <Badge
-                  className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
-                  variant="default"
-                >
-                  {link.icon}
-                  {link.type}
-                </Badge>
-              </a>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="p-6 flex flex-col gap-3 flex-1">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex flex-col gap-1">
-            <h3 className="font-semibold">{title}</h3>
-            <time className="text-xs text-muted-foreground">{dates}</time>
-          </div>
-          <a
-            href={href || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-sm"
-            aria-label={`Open ${title}`}
-          >
-            <ArrowUpRight className="h-4 w-4" aria-hidden />
-          </a>
         </div>
-        <div className="text-xs flex-1 prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-          <Markdown>{description}</Markdown>
-        </div>
-        {tags && tags.length > 0 && (
-          <div className="flex flex-wrap gap-1 mt-auto">
-            {tags.map((tag) => (
+      </a>
+
+      {links && links.length > 0 && (
+        <div className="absolute top-2 right-2 flex flex-wrap gap-2 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+          {links.map((link, idx) => (
+            <a
+              href={link.href}
+              key={idx}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
               <Badge
-                key={tag}
-                className="text-[11px] font-medium border border-border h-6 w-fit px-2"
-                variant="outline"
+                className="flex items-center gap-1.5 text-xs bg-black text-white hover:bg-black/90"
+                variant="default"
               >
-                {tag}
+                {link.icon}
+                {link.type}
               </Badge>
-            ))}
-          </div>
-        )}
-      </div>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

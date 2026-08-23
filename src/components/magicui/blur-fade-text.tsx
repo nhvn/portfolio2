@@ -3,7 +3,7 @@ import { motion, type Variants } from "motion/react";
 import { useMemo } from "react";
 
 interface BlurFadeTextProps {
-  text: string;
+  text: React.ReactNode;
   className?: string;
   variant?: {
     hidden: { y: number };
@@ -30,7 +30,10 @@ const BlurFadeText = ({
     visible: { y: 0, opacity: 1, filter: "blur(0px)" },
   };
   const combinedVariants = variant || defaultVariants;
-  const characters = useMemo(() => Array.from(text), [text]);
+  const characters = useMemo(
+    () => (typeof text === "string" ? Array.from(text) : []),
+    [text]
+  );
 
   if (animateByCharacter) {
     return (

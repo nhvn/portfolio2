@@ -1,0 +1,104 @@
+---
+role: "Full Stack Developer"
+duration: "Aug 2024 - Nov 2024"
+contributions:
+  - "Integrated Stability AI API for high-quality image generation, with automatic fallback to local GAN model"
+  - "Leveraged NVIDIA AI Workbench for streamlined deployment and application management"
+  - "Created a scalable system supporting multiple image formats and batch processing"
+---
+
+## Intro
+
+AugmentAI was developed as a solution to address data scarcity in machine learning projects. With a small dataset, machine learning models may struggle to generalize. By leveraging GANs, AugmentAI generates synthetic images to augment the dataset, improving model performance.
+
+AugmentAI was built for the Dell x NVIDIA HackAI Hackathon, where it was awarded **Honorable Mention**.
+
+## Problem
+
+Data scarcity and diversity are significant challenges in machine learning, particularly for small to mid-sized projects. Many AI models require large, diverse datasets to achieve high accuracy. However, collecting and labeling these datasets is often time-consuming and expensive. Without sufficient data, models may suffer from bias, overfitting, or underperformance in real-world applications, limiting their generalization capabilities.
+
+## Solution
+
+AugmentAI provides an innovative solution by leveraging Generative Adversarial Networks (GANs) to generate synthetic images that expand and diversify datasets. By applying a variety of augmentation techniques like rotation, flipping, and color jittering, the platform helps users create enriched datasets with minimal effort. Integrated with NVIDIA AI Workbench, AugmentAI enables efficient and scalable model training, offering a user-friendly web interface where users can upload their datasets and receive augmented or synthetic images, dramatically enhancing their machine learning workflows.
+
+<MediaContainer src="/projects/augmentai/solution-overview.png" alt="AugmentAI solution overview" />
+
+## Project Overview
+
+AugmentAI merges GAN technology with an easy-to-use web application for streamlined dataset augmentation. Users can upload their images and receive both augmented and synthetic outputs suitable for various machine learning applications.
+
+### Key Features of AugmentAI
+
+- High-Quality Synthetic Image Generation - Uses the Stability AI API for high-resolution, realistic image creation
+- User-Centric Web Interface - Simple, accessible image upload and augmentation process
+- Diverse Augmentation Techniques - Offers transformations like rotation, flipping, and color adjustments to maximize dataset variety
+- Scalable Training and Inference - Integrated with NVIDIA AI Workbench to ensure efficient processing for larger datasets
+
+### Current Capabilities and Limitations
+
+Currently, AugmentAI produces images up to 64x64 pixels when using the fallback local GAN, with plans to expand resolutions and augmentations for richer datasets. Future improvements aim to support broader applications, including text and tabular data.
+
+## Initial Phase (Using GANs)
+
+### The Local GAN Approach
+
+In the early stages of AugmentAI, I implemented a custom GAN with convolutional layers for both the Generator and Discriminator. This model was trained locally on a CPU using my M2 MacBook Air, which presented several resource limitations. Despite utilizing techniques like batch normalization and Leaky ReLU activation functions to stabilize training, the model could only produce low-resolution (64x64 pixel) synthetic images due to hardware constraints. This setup, while functional, resulted in longer training times and limited scalability.
+
+<MediaContainer src="/projects/augmentai/local-gan-approach.png" alt="AugmentAI local GAN approach" />
+
+### Data Preparation and Augmentation
+
+The dataset consists of nature images, resized, normalized, and preprocessed for training. Initial augmentations included flipping, rotation, and color adjustments to increase dataset diversity.
+
+### Model Training and Metrics
+
+The custom GAN model was trained on a subset of 900 nature photos from a Kaggle dataset. With the local model, I tracked metrics like Discriminator loss (d_loss) and Generator loss (g_loss) to evaluate performance. A balanced loss indicated convergence and realistic synthetic outputs, but output resolution remained low on the CPU setup.
+
+Discriminator loss (d_loss) and Generator loss (g_loss) were tracked to evaluate model performance. A balance between these losses indicated the convergence of the model and the ability to generate realistic synthetic images.
+
+<MediaContainer src="/projects/augmentai/training-metrics.png" alt="AugmentAI training metrics" />
+
+## Second Phase (Using APIs)
+
+### Transition to Stability AI API
+
+To overcome the resolution and resource limitations of the local GAN, I integrated the Stability AI API for high-quality image generation. This transition allowed AugmentAI to maintain the original image dimensions and drastically improve processing times and output quality. The API now handles the bulk of synthetic image generation, making AugmentAI more robust and suitable for production environments.
+
+### Web Application Integration
+
+The Flask backend manages user interactions, including file uploads, image augmentation, and result displays. Initially integrated with the local GAN, the backend now utilizes the Stability AI API to generate and serve high-resolution synthetic images on demand, allowing for smoother user experience and quicker results.
+
+## Final Designs
+
+The final design prioritizes simplicity and ease of use, enabling users to generate augmented images in just a few steps. The user interface is clean, with clear prompts guiding users through the augmentation process.
+
+### Web Interface
+
+The web interface allows users to easily start the augmentation process. Once the images are uploaded, the user simply clicks the "Augment" button to begin the augmentation process. This intuitive interface streamlines the workflow, providing a user-friendly experience for quickly generating augmented datasets.
+
+<MediaContainer src="/projects/augmentai/web-interface.png" alt="AugmentAI web interface" />
+
+### Initial GAN Results
+
+Using a custom-trained GAN model on limited hardware, the initial results were modest, displaying low-resolution images at 64x64 pixels. These images exhibit only minor color shifts, with minimal variation beyond subtle changes in hue and brightness. While functional, this early model's adjustments were limited by the CPU-based setup, resulting in simple augmentations and leaving significant room for improvement in generating diverse and higher-quality transformations.
+
+<MediaContainer src="/projects/augmentai/initial-gan-results.png" alt="AugmentAI initial GAN results" />
+
+### Stability AI API Results
+
+With the transition to the Stability AI API, the augmentation results improved dramatically. Now, images maintain their original resolution and present diverse transformations with high visual fidelity. The API integration enables AugmentAI to generate production-ready, high-quality synthetic images quickly, overcoming prior resolution and diversity constraints. This enhancement elevates the platform's capability to provide meaningful data augmentation for machine learning applications.
+
+<MediaContainer src="/projects/augmentai/stability-api-results.png" alt="AugmentAI Stability AI API results" />
+
+## Future Steps
+
+### Potential Ideas
+
+- Expand augmentation capabilities to include text and other data types
+- Improve image resolution for even higher-quality outputs
+- Integrate with cloud services for large-scale data processing
+- Add support for various GAN architectures to provide different types of synthetic data
+
+### Final Thoughts
+
+AugmentAI began as a solution to a fundamental challenge in machine learning: the scarcity and diversity of quality data. This project represents my first foray into combining full-stack development with AI-driven applications, and the journey has been one of growth and discovery. Moving from a custom-built, CPU-trained GAN to an API-powered solution reflects the challenges and rewards of pushing a project to its full potential. I'm proud of the progress made and excited to continue evolving AugmentAI, expanding its features and capabilities to serve a broader audience.
