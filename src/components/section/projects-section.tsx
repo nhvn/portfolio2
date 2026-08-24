@@ -42,6 +42,8 @@ export default function ProjectsSection() {
                                 dates={project.dates}
                                 image={project.image}
                                 video={project.video}
+                                playable={project.playable}
+                                award={project.award}
                                 links={project.links}
                             />
                         </BlurFade>
@@ -64,6 +66,8 @@ export default function ProjectsSection() {
                                 dates={project.dates}
                                 image={project.image}
                                 video={project.video}
+                                playable={project.playable}
+                                award={project.award}
                                 links={project.links}
                             />
                         </BlurFade>
@@ -87,6 +91,8 @@ export default function ProjectsSection() {
                                         dates={project.dates}
                                         image={project.image}
                                         video={project.video}
+                                        playable={project.playable}
+                                        award={project.award}
                                         links={project.links}
                                     />
                                 </motion.div>

@@ -1,7 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
 
+import { AwardRibbon } from "@/components/award-ribbon";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Gamepad2 } from "lucide-react";
 import { useState } from "react";
 
 function ProjectImage({ src, alt }: { src: string; alt: string }) {
@@ -29,6 +31,8 @@ interface Props {
   dates: string;
   image?: string;
   video?: string;
+  playable?: boolean;
+  award?: string;
   links?: readonly {
     icon: React.ReactNode;
     type: string;
@@ -45,6 +49,8 @@ export function ProjectCard({
   dates,
   image,
   video,
+  playable,
+  award,
   links,
   className,
 }: Props) {
@@ -54,10 +60,11 @@ export function ProjectCard({
   return (
     <div
       className={cn(
-        "group relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-border",
+        "group relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-border @container",
         className
       )}
     >
+      {award && <AwardRibbon label={award} />}
       <a
         href={detailHref}
         {...(!isInternal && { target: "_blank", rel: "noopener noreferrer" })}
@@ -80,7 +87,10 @@ export function ProjectCard({
         )}
 
         <div className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-4 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
-          <h3 className="text-sm font-semibold text-white leading-tight">{title}</h3>
+          <h3 className="flex items-center gap-1.5 text-sm font-semibold text-white leading-tight">
+            {playable && <Gamepad2 className="size-3.5 shrink-0" aria-label="Playable" />}
+            {title}
+          </h3>
           <time className="text-[11px] text-white/70">{dates}</time>
           {blurb && (
             <p className="text-xs text-white/85 leading-snug mt-1">{blurb}</p>

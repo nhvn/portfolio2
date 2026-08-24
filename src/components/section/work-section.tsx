@@ -23,7 +23,7 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
     <img
       src={src}
       alt={alt}
-      className="size-8 p-1 border rounded-none shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+      className="size-8 p-1 border rounded-none shadow ring-2 ring-border overflow-hidden object-contain flex-none bg-white"
       onError={() => setImageError(true)}
     />
   );
@@ -59,10 +59,12 @@ function WorkCard({ work }: { work: Work }) {
                   />
                 </span>
               </span>
-              <span className="font-sans text-xs text-muted-foreground block">{work.title}</span>
+              <span className="font-sans text-xs text-muted-foreground block transition-colors group-hover:text-foreground">
+                {work.title}
+              </span>
             </span>
           </span>
-          <span className="text-xs tabular-nums text-muted-foreground sm:text-right flex-none pl-9 sm:pl-0">
+          <span className="text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-9 sm:pl-0">
             {work.start} - {work.end ?? DATA.sections.work.presentLabel}
           </span>
         </span>

@@ -40,7 +40,7 @@ interface BlogPost {
 function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode> {
   return {
   about: (
-    <section id="about">
+    <section id="about" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 3}>
         <div className={cn("flex min-h-0 flex-col gap-y-4", SECTION_CARD_CLASS)}>
           <h2 className="text-xl font-bold">{DATA.sections.about.heading}</h2>
@@ -63,7 +63,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
     </section>
   ),
   work: (
-    <section id="work">
+    <section id="work" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 5}>
         <div className="flex min-h-0 flex-col gap-y-9">
           <h2 className="text-xl font-bold">{DATA.sections.work.heading}</h2>
@@ -73,7 +73,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
     </section>
   ),
   education: (
-    <section id="education">
+    <section id="education" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 7}>
         <div className={cn("flex min-h-0 flex-col gap-y-6", SECTION_CARD_CLASS)}>
           <h2 className="text-xl font-bold">{DATA.sections.education.heading}</h2>
@@ -110,7 +110,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
     </section>
   ),
   skills: (
-    <section id="skills">
+    <section id="skills" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 9}>
         <div className="flex min-h-0 flex-col gap-y-4">
           <h2 className="text-xl font-bold">{DATA.sections.skills.heading}</h2>
@@ -128,7 +128,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
     </section>
   ),
   projects: (
-    <section id="projects">
+    <section id="projects" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 11}>
         <div className={SECTION_CARD_CLASS}>
           <ProjectsSection />
@@ -137,19 +137,19 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
     </section>
   ),
   life: (
-    <section id="life">
+    <section id="life" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 13}>
         <div className="flex min-h-0 flex-col gap-y-6">
           <h2 className="text-xl font-bold">{DATA.sections.life.heading}</h2>
           <PhotosSection />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Recent Blogs</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Latest Posts</h3>
           <BlogPreviewSection posts={posts} />
         </div>
       </BlurFade>
     </section>
   ),
   contact: (
-    <section id="contact">
+    <section id="contact" className="scroll-mt-8">
       <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 17}>
         <div className={SECTION_CARD_CLASS}>
           <ContactSection />
@@ -166,6 +166,25 @@ export default function HomePage({ posts }: { posts: BlogPost[] }) {
     .filter(([, s]) => s.enabled)
     .sort(([, a], [, b]) => a.order - b.order)
     .map(([key]) => key);
+
+  // This page renders client-only, so a link like /#projects clicked from
+  // another page (e.g. /blog) lands here before the target section exists
+  // in the DOM. Left alone, the browser's native hash-scroll either fires
+  // too early and drops you at the top, or jumps instantly the moment the
+  // element appears — no visible scroll. Strip the hash immediately so
+  // nothing native can jump the page, let the just-loaded home page paint
+  // for a beat, then scroll there ourselves so it's an actual, visible
+  // scroll down from the top.
+  React.useEffect(() => {
+    const hash = window.location.hash;
+    if (!hash) return;
+    const id = hash.slice(1);
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    const timer = setTimeout(() => {
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import { formatDate } from "@/lib/utils";
+import { ChevronLeft } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -26,6 +27,16 @@ export default function BlogList({ posts, allPostsCount, pagination }: BlogListP
   return (
     <section id="blog">
       <BlurFade delay={BLUR_FADE_DELAY}>
+        <div className="flex justify-start gap-4 items-center">
+          <a
+            href="/"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors border border-border rounded-lg px-2 py-1 inline-flex items-center gap-1 mb-6 group"
+            aria-label="Back to Home"
+          >
+            <ChevronLeft className="size-3 group-hover:-translate-x-px transition-transform" />
+            Back to Home
+          </a>
+        </div>
         <h1 className="text-2xl font-semibold tracking-tight mb-4">
           Blog{" "}
           <span className="ml-1 bg-card border border-border rounded-md px-2 py-1 text-muted-foreground text-sm">

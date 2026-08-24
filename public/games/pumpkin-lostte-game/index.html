@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="./styles.css" />
+    <title>Pumpkin Lost-te</title>
+  </head>
+  <body>
+    <audio id="bg-music" src="audio/background-music.mp3" loop></audio>
+    <div id="game-wrap">
+      <canvas></canvas>
+      <div id="iris-mask"></div>
+      <img id="win-pumpkin" src="img/Pumpkin3.png" alt="" />
+      <div id="keyboard-hint">Keyboard: W A D</div>
+      <div id="touch-controls">
+        <button id="btn-left" aria-label="Move left">&#8592;</button>
+        <button id="btn-jump" aria-label="Jump">&#8593;</button>
+        <button id="btn-right" aria-label="Move right">&#8594;</button>
+      </div>
+    </div>
+    <img class="myImg" style="display: none" />
+    <script src="index.js" type="module"></script>
+
+    <div id="prompt">Help Jerry reach his pumpkin — jump the spikes, dodge the chaser</div>
+
+    <div id="modal" class="modal">
+      <div class="modal-content">
+        <h1>Yikes, let's try again!</h1>
+        <button id="retry-button">Retry</button>
+      </div>
+    </div>
+
+    <div id="win-modal" class="modal">
+      <div class="modal-content">
+        <h1>YOU WIN!</h1>
+        <p id="win-time"></p>
+        <button id="win-button">Play Again</button>
+      </div>
+    </div>
+
+    <div id="loading-overlay">Loading...</div>
+  </body>
+</html>

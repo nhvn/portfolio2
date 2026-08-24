@@ -29,8 +29,8 @@ export const DATA = {
     },
     contact: {
       order: 8, enabled: true,
-      label: "Get in Touch",
-      text: "Whether you're hiring, have a project in mind, or just want to talk shop about software, data, or AI, I'd love to hear from you. Send me a message on LinkedIn or shoot me an email, and I'll get back to you as soon as I can.",
+      label: "Let's Connect",
+      text: "Whether you're hiring, have a project in mind, or just want to talk shop about software, data, or AI, I'd love to hear from you. Send me a message on [LinkedIn](https://www.linkedin.com/in/alannhans) or shoot me an [email](mailto:alannhan443@gmail.com), and I'll get back to you as soon as I can.",
     },
   },
   photos: [
@@ -174,18 +174,20 @@ export const DATA = {
     {
       title: "Karma Maze",
       slug: "karma-maze",
-      href: "https://www.reddit.com/r/KarmaMaze/",
+      href: "https://devpost.com/software/karma-maze",
       dates: "November 2024 - January 2025",
       active: true,
+      playable: true,
+      award: undefined,
       blurb: "Reddit-integrated maze game built for a hackathon.",
       description:
         "A Reddit-integrated maze adventure game built for the Reddit Puzzles & Games Hackathon. Players guide daring Snoos through procedurally generated mazes, collecting karma and overcoming challenges, reaching 1,000+ Reddit users on both desktop and mobile.",
       technologies: ["Devvit", "JavaScript", "Node.js", "React", "Redis", "TypeScript"],
       links: [
         {
-          type: "Reddit",
-          href: "https://www.reddit.com/r/KarmaMaze/",
-          icon: <Icons.globe className="size-3" />,
+          type: "Devpost",
+          href: "https://devpost.com/software/karma-maze",
+          icon: <Icons.devpost className="size-3" />,
         },
         {
           type: "Source",
@@ -202,11 +204,18 @@ export const DATA = {
       href: "https://github.com/nhvn/data-aug",
       dates: "August 2024 - November 2024",
       active: true,
+      playable: false,
+      award: "Winner",
       blurb: "GAN-based platform for synthetic image generation.",
       description:
         "A generative AI platform for data augmentation and synthetic image generation, awarded honorable mention at the Dell x NVIDIA HackAI Hackathon. Uses a GAN-based model with a Stability AI API fallback, scaled with NVIDIA AI Workbench.",
       technologies: ["Python", "PyTorch", "Flask", "NVIDIA AI Workbench", "JavaScript"],
       links: [
+        {
+          type: "Devpost",
+          href: "https://devpost.com/software/data-augmentation-no-name-yet",
+          icon: <Icons.devpost className="size-3" />,
+        },
         {
           type: "Source",
           href: "https://github.com/nhvn/data-aug",
@@ -222,6 +231,8 @@ export const DATA = {
       href: "https://befit-v2.zachuri.com/login",
       dates: "February 2024 - August 2024",
       active: true,
+      playable: false,
+      award: undefined,
       blurb: "Fitness tracker for workouts, diet, and weight.",
       description:
         "A fitness companion app for tracking weight-loss progress, diet, and workouts. Built with a team of two other engineers, later expanded into a native iOS app using Swift for a seamless mobile experience.",
@@ -247,6 +258,8 @@ export const DATA = {
       href: "https://github.com/nhvn/to-do-list",
       dates: "April 2023 - June 2023",
       active: false,
+      playable: false,
+      award: undefined,
       blurb: "To-do app with tasks, priorities, and notes.",
       description:
         "A productivity tool for creating, editing, and tracking tasks with due dates, priorities, and sticky notes. Built a REST API with Node.js, Express, and MongoDB, supporting 100+ users and 10,000+ tasks across 5 teams.",
@@ -267,6 +280,8 @@ export const DATA = {
       href: "https://github.com/nhvn",
       dates: "February 2023 - March 2023",
       active: false,
+      playable: false,
+      award: undefined,
       blurb: "IoT system for automated home lighting.",
       description:
         "An IoT automation solution for precise control of up to 50 lights across 10 rooms with customizable schedules, built on a Raspberry Pi with multithreaded parallel light control.",
@@ -278,19 +293,16 @@ export const DATA = {
     {
       title: "Pumpkin Lostte Game",
       slug: "pumpkin-lostte-game",
-      href: "https://pumpkin-lost-te.web.app/",
+      href: "https://github.com/nhvn/first-browser-game",
       dates: "October 2022 - February 2023",
       active: false,
+      playable: true,
+      award: undefined,
       blurb: "Halloween-themed twist on Flappy Bird.",
       description:
         "A Halloween-themed twist on Flappy Bird, where players guide Jerry to rescue his lost pumpkin by dodging obstacles. Built with an object-oriented architecture using ES6 classes and HTML5 Canvas.",
       technologies: ["JavaScript", "HTML", "CSS", "Firebase"],
       links: [
-        {
-          type: "Website",
-          href: "https://pumpkin-lost-te.web.app/",
-          icon: <Icons.globe className="size-3" />,
-        },
         {
           type: "Source",
           href: "https://github.com/nhvn/first-browser-game",

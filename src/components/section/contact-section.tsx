@@ -1,4 +1,5 @@
 import { DATA } from "@/data/resume";
+import Markdown from "react-markdown";
 
 export default function ContactSection() {
   return (
@@ -6,9 +7,20 @@ export default function ContactSection() {
       <h2 className="text-xl font-bold">
         {DATA.sections.contact.label}
       </h2>
-      <p className="text-muted-foreground">
-        {DATA.sections.contact.text}
-      </p>
+      <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
+        <Markdown
+          components={{
+            a: ({ node, ...props }) => (
+              <a
+                {...props}
+                className="font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-foreground hover:underline"
+              />
+            ),
+          }}
+        >
+          {DATA.sections.contact.text}
+        </Markdown>
+      </div>
     </div>
   );
 }

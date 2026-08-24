@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Key Maze</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container" tabindex="0">
+        <!-- Stats Bar -->
+        <div id="stats">
+            <div class="lives-container">
+                <div class="heart-icon" data-filled="true">❤️</div>
+                <div class="heart-icon" data-filled="true">❤️</div>
+                <div class="heart-icon" data-filled="true">❤️</div>
+            </div>
+            <div id="timer">30 s</div>
+            <div class="powerup-stats">
+                <div class="key-stat" data-count="0">
+                    <div id="keys">0</div>
+                </div>
+                <div id="map-indicator" class="powerup-indicator" style="display: none;"></div>
+                <div id="crystal-indicator" class="powerup-indicator" style="display: none;"></div>
+            </div>
+            <div class="button-container">
+                <div class="games-played">
+                    <span id="gamesPlayedCount"></span>
+                    <!-- <span>Mazes</span> -->
+                </div>
+                <button id="pauseButton" class="icon-button">
+                    <div class="pause-icon">
+                        <div class="pause-bar"></div>
+                        <div class="pause-bar"></div>
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Game Elements -->
+        <div id="maze-grid"></div>
+
+        <!-- Overlays -->
+        <div id="loading-overlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+        <div id="top-right-messages"></div>
+        <div id="animation-overlay"></div>
+        
+        <!-- Message Overlay (new structure) -->
+        <div id="message-overlay" style="display: none;">
+            <div class="pause-menu">
+                <div id="message"></div>
+            </div>
+        </div>
+        
+        <!-- Pause Menu -->
+        <div id="pause-overlay" style="display: none;">
+            <div class="pause-menu">
+                <div class="pause-stats">
+                    <!-- Normal mode stats -->
+                    <div class="normal-mode-stats">
+                        <div class="stat-item">Total Score: <span id="pauseTotalScore">0</span></div>
+                        <div class="stat-item">Games Played: <span id="pauseGamesPlayed">0</span></div>
+                    </div>
+                    <!-- Casual mode stats -->
+                    <div class="casual-mode-stats" style="display: none">
+                        <div class="stat-item">Games Played: <span id="pauseGamesPlayedCasual">0</span></div>
+                    </div>
+                </div>
+                <div class="pause-buttons">
+                    <button id="resumeButton" class="pause-button">Resume</button>
+                    <button id="quitButton" class="pause-button">Quit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="maze.js"></script>
+</body>
+</html>

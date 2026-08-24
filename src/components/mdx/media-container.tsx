@@ -8,6 +8,7 @@ interface MediaContainerProps {
   type?: "image" | "video";
   hoverVideoSrc?: string;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export function MediaContainer({
@@ -16,9 +17,11 @@ export function MediaContainer({
   type = "image",
   hoverVideoSrc,
   className = "",
+  children,
 }: MediaContainerProps) {
   return (
-    <div className={cn("w-full rounded-lg overflow-hidden mb-3 relative group", className)}>
+    <div className={cn("w-full rounded-lg overflow-hidden mb-3 relative group @container", className)}>
+      {children}
       {type === "image" ? (
         <img src={src} alt={alt} className="w-full h-auto block" style={{ margin: 0 }} />
       ) : (

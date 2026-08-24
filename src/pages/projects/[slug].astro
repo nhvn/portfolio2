@@ -5,9 +5,12 @@ import { getCollection, render } from "astro:content";
 import { DATA } from "@/data/resume";
 import { mdxComponents } from "@/mdx-components";
 import { MediaContainer } from "@/components/mdx/media-container";
+import { AwardRibbon } from "@/components/award-ribbon";
 import { Badge } from "@/components/ui/badge";
 import { ProjectLinks } from "@/components/project-links";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Gamepad2 } from "lucide-react";
+import KarmaMazeGame from "@/components/KarmaMazeGame";
+import PumpkinGame from "@/components/PumpkinGame";
 
 export async function getStaticPaths() {
   const entries = await getCollection("projects");
@@ -60,8 +63,11 @@ const { Content } = await render(entry);
 
     <div class="flex flex-col gap-4">
       <h1
-        class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight"
+        class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight flex items-center gap-3"
       >
+        {project.playable && (
+          <Gamepad2 className="size-7 md:size-8 shrink-0 text-muted-foreground" aria-label="Playable" />
+        )}
         {project.title}
       </h1>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
@@ -100,7 +106,30 @@ const { Content } = await render(entry);
           alt={project.title}
           hoverVideoSrc={project.video || undefined}
           className="max-w-lg mx-auto"
-        />
+        >
+          {project.award && <AwardRibbon label={project.award} />}
+        </MediaContainer>
+      </div>
+    )}
+
+    {slug === "karma-maze" && (
+      <div class="mt-8">
+        <h2 class="text-sm font-semibold mb-3">Play Karma Maze</h2>
+        <KarmaMazeGame client:only="react" />
+        <p class="text-xs text-muted-foreground mt-2">
+          This is the same game that ran on Reddit, minus the leaderboard.
+        </p>
+      </div>
+    )}
+
+    {slug === "pumpkin-lostte-game" && (
+      <div class="mt-8">
+        <h2 class="text-sm font-semibold mb-3">Play Pumpkin Lostte</h2>
+        <PumpkinGame client:only="react" />
+        <p class="text-xs text-muted-foreground mt-2">
+          Note: this playable version leans into a Mario-style platformer rather than the
+          original's Flappy Bird-style dodging, to make it a better fit as a browser embed.
+        </p>
       </div>
     )}
 
