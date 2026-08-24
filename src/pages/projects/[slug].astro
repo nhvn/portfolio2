@@ -63,11 +63,8 @@ const { Content } = await render(entry);
 
     <div class="flex flex-col gap-4">
       <h1
-        class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight flex items-center gap-3"
+        class="title font-semibold text-3xl md:text-4xl tracking-tighter leading-tight"
       >
-        {project.playable && (
-          <Gamepad2 className="size-7 md:size-8 shrink-0 text-muted-foreground" aria-label="Playable" />
-        )}
         {project.title}
       </h1>
       <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
@@ -114,7 +111,10 @@ const { Content } = await render(entry);
 
     {slug === "karma-maze" && (
       <div class="mt-8">
-        <h2 class="text-sm font-semibold mb-3">Play Karma Maze</h2>
+        <h2 class="text-sm font-semibold mb-3 flex items-center gap-1.5">
+          <Gamepad2 className="size-4 shrink-0 text-muted-foreground" aria-label="Playable" />
+          Play Karma Maze
+        </h2>
         <KarmaMazeGame client:only="react" />
         <p class="text-xs text-muted-foreground mt-2">
           This is the same game that ran on Reddit, minus the leaderboard.
@@ -124,7 +124,10 @@ const { Content } = await render(entry);
 
     {slug === "pumpkin-lostte-game" && (
       <div class="mt-8">
-        <h2 class="text-sm font-semibold mb-3">Play Pumpkin Lostte</h2>
+        <h2 class="text-sm font-semibold mb-3 flex items-center gap-1.5">
+          <Gamepad2 className="size-4 shrink-0 text-muted-foreground" aria-label="Playable" />
+          Play Pumpkin Lostte
+        </h2>
         <PumpkinGame client:only="react" />
         <p class="text-xs text-muted-foreground mt-2">
           Note: this playable version leans into a Mario-style platformer rather than the
