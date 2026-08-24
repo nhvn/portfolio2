@@ -60,7 +60,7 @@ export function ProjectCard({
   return (
     <div
       className={cn(
-        "group relative aspect-[3/2] w-full overflow-hidden rounded-xl border border-border @container",
+        "group relative aspect-[3/2] w-full overflow-hidden rounded-[12px] border border-border @container",
         className
       )}
     >

@@ -10,9 +10,11 @@ export default function ContactSection() {
       <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
         <Markdown
           components={{
-            a: ({ node, ...props }) => (
+            a: ({ node, href, ...props }) => (
               <a
                 {...props}
+                href={href}
+                {...(href?.startsWith("http") && { target: "_blank", rel: "noopener noreferrer" })}
                 className="font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-foreground hover:underline"
               />
             ),

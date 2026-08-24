@@ -105,7 +105,7 @@ const { Content } = await render(entry);
           src={project.image}
           alt={project.title}
           hoverVideoSrc={project.video || undefined}
-          className="max-w-lg mx-auto"
+          className="max-w-lg mx-auto rounded-[12px]"
         >
           {project.award && <AwardRibbon label={project.award} />}
         </MediaContainer>

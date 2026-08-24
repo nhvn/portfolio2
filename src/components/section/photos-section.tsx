@@ -10,9 +10,10 @@ const DESKTOP_PAGE_SIZE = 9;
 const MOBILE_BREAKPOINT = "(max-width: 639px)"; // matches Tailwind's `sm` cutoff
 const SLIDE_TRANSITION = { duration: 0.55, ease: [0.32, 0.72, 0, 1] as const };
 const SNAP_TRANSITION = { duration: 0 };
-// Blocks rapid re-clicks from queueing up multiple page changes; matches
-// the slide duration so the next click only lands once the animation settles.
-const CLICK_COOLDOWN_MS = 600;
+// Blocks rapid re-clicks from queueing up multiple page changes; a bit
+// longer than the slide duration so the next click only lands once the
+// animation has fully settled, not right as it's finishing.
+const CLICK_COOLDOWN_MS = 750;
 
 // Each page gets its own fully isolated component instance (and therefore
 // its own ref/effect/ResizeObserver) rather than sharing one ref object
@@ -79,6 +80,23 @@ export default function PhotosSection() {
   const start = page * pageSize;
   const pagePhotos = photos.slice(start, start + pageSize);
 
+  // The stutter on click wasn't the transition itself — it was the browser
+  // decoding a handful of brand-new <img> elements for the first time at
+  // the exact moment the slide animation started. Warming the next page's
+  // images in the background as soon as the current one settles means
+  // they're already decoded and cached by the time a click actually swaps
+  // pages in.
+  useEffect(() => {
+    if (totalPages <= 1) return;
+    const nextPage = (page + 1) % totalPages;
+    const nextStart = nextPage * pageSize;
+    const nextPhotos = photos.slice(nextStart, nextStart + pageSize);
+    nextPhotos.forEach((photo) => {
+      const img = new Image();
+      img.src = photo.src;
+    });
+  }, [page, pageSize, totalPages, photos]);
+
   const goNext = () => {
     if (onCooldownRef.current) return;
     onCooldownRef.current = true;
@@ -112,7 +130,7 @@ export default function PhotosSection() {
               key={photo.src}
               src={photo.src}
               alt={photo.alt}
-              className="w-full h-auto rounded-xl mb-2 break-inside-avoid"
+              className="w-full h-auto rounded-[12px] mb-2 break-inside-avoid"
             />
           ))}
         </MeasuredPanel>
