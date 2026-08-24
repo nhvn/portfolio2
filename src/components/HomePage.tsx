@@ -142,7 +142,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
         <div className="flex min-h-0 flex-col gap-y-6">
           <h2 className="text-xl font-bold">{DATA.sections.life.heading}</h2>
           <PhotosSection />
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Blog</h3>
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Recent Blogs</h3>
           <BlogPreviewSection posts={posts} />
         </div>
       </BlurFade>
