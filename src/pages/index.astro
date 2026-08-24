@@ -10,7 +10,7 @@ const sortedPosts = [...allPosts].sort((a, b) => {
   return 1;
 });
 
-const posts = sortedPosts.slice(0, 3).map((post) => ({
+const posts = sortedPosts.slice(0, 2).map((post) => ({
   id: post.id,
   title: post.data.title,
   publishedAt: post.data.publishedAt,

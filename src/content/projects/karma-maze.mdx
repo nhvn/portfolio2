@@ -10,59 +10,62 @@ contributions:
 
 ## Project Overview
 
-Karma Maze is a Reddit-integrated game that blends platform mechanics with Reddit's karma system. Developed as a unique entry for the Reddit Puzzles & Games Hackathon, it offers players procedurally generated mazes where karma serves as both a resource and a reward. Players navigate these mazes, solving challenges and competing for leaderboard positions in a game experience tailored specifically for Reddit users.
+Karma Maze is a game I built for the Reddit Puzzles & Games Hackathon that runs directly inside Reddit. Players guide a Snoo through a procedurally generated maze, using karma as both currency and score, and compete for a spot on the leaderboard.
 
 <MediaContainer src="/projects/karma-maze/gameplay.png" alt="Karma Maze gameplay" />
 
 ## Design and Development Process
 
-Karma Maze's design and development process focused on creating an engaging experience tailored for Reddit users. Inspired by Reddit's Snoo and its karma-driven culture, the project combined thoughtful design with technical innovation to resonate with its audience.
+I wanted the whole thing to feel unmistakably Reddit - Snoo as the character, karma driving the core loop, that kind of thing - so a lot of early decisions were about tying the mechanics back to stuff Reddit users already understand.
 
 ### Early Development
 
-The development began with wireframes and prototypes to establish the core mechanics and gameplay flow. The maze generation algorithm was designed to ensure solvable and procedurally generated mazes, offering players a unique experience every time. Early stages involved implementing intuitive UI elements and optimizing game performance.
+I started with wireframes and prototypes to nail down the core loop before touching visuals. Getting the maze generator to reliably spit out solvable mazes took a fair amount of trial and error, and I spent a good chunk of early dev just on UI and performance.
 
 <MediaContainer src="/projects/karma-maze/early-development.png" alt="Karma Maze early development screenshots" />
 
 ### Procreate and Visual Design
 
-Custom assets were meticulously crafted using Procreate to enhance the visual appeal and gameplay experience. From karma orbs to intricate maze tiles, each element was designed to balance functionality with aesthetics while maintaining compatibility with Reddit's interface. The visuals aim to immerse players in the adventurous theme of the game while ensuring clarity for intuitive navigation.
+I hand-drew all the game assets in Procreate - karma orbs, maze tiles, all of it - trying to keep things readable at a glance while still fitting Reddit's visual style.
 
 <MediaContainer src="/projects/karma-maze/procreate-design.png" alt="Karma Maze Procreate visual design" />
 
 ## Challenges Faced
 
-The development of Karma Maze was not without its hurdles. The initial maze generation algorithm often produced unsolvable mazes, requiring iterative testing and debugging to ensure reliability. Integration with Reddit's API presented unique challenges, particularly in managing real-time karma updates and authentication for seamless gameplay. Additionally, balancing performance across devices was demanding, as the game needed to run efficiently on both high-end desktops and mobile devices. On the visual front, translating Procreate designs into compatible in-game assets required multiple iterations to maintain clarity and functionality. These challenges were overcome through persistence, research, and testing, ultimately resulting in a polished product.
+The maze generator was the biggest headache early on - it kept producing mazes with no valid path through, which meant a lot of debugging before it was reliable. Reddit's API had its own learning curve too, especially around keeping karma updates and auth in sync in real time. Performance was another constant balancing act since the game needed to run fine on both desktop and mobile. And translating the Procreate art into assets that actually looked good in-game took more passes than I expected.
 
 ## Technical Implementation
 
-Karma Maze was built using Devvit, Reddit's emerging development platform, which facilitated close integration with Reddit's ecosystem. The game uses procedural maze generation to ensure unique and solvable mazes for each playthrough. TypeScript was employed to ensure maintainability, with Redis powering real-time score tracking and competitive leaderboards. Seamless integration with Reddit APIs enables player authentication, leaderboard updates, and karma tracking, creating a holistic Reddit-native gaming experience.
+I built Karma Maze on Devvit, Reddit's dev platform, which made hooking into the Reddit ecosystem straightforward. Mazes are procedurally generated so no two playthroughs are the same. The game is written in TypeScript, with Redis handling real-time score tracking and leaderboards, and it authenticates and reads karma straight from Reddit's own APIs.
 
 ## Game Features
 
 ### Core Gameplay Mechanics
 
-Players navigate mazes using keyboard or touch controls, collecting karma to unlock doors and bypass challenges. Each maze introduces progressively difficult obstacles, including traps and fake exits.
+Players move through the maze with keyboard or touch controls, collecting karma to open doors and get past obstacles. Later mazes add traps and fake exits to keep things from getting predictable.
 
 ### Progression and Replayability
 
-With procedurally generated mazes and evolving difficulty, players are encouraged to strategize, adapt, and compete for high scores on the leaderboard.
+Since every maze is generated fresh, there's a reason to keep coming back and chasing a better leaderboard spot.
 
 ### Platform Integration
 
-The game seamlessly integrates with Reddit, allowing players to enjoy Karma Maze directly from their Reddit profile. Reddit users can easily access and interact with the game, enhancing community engagement and accessibility.
+Because it runs natively inside Reddit, players can jump in straight from a subreddit without leaving the app - no separate download or account needed.
 
 ## Visual Evolution
 
-The game's visual design evolved from wireframes to polished assets, emphasizing readability and user engagement. Custom visuals, such as karma orbs and doors, were created to enrich the gaming experience. These assets were crafted in Procreate, balancing aesthetics with functionality for the Reddit platform.
+The art went through a lot of passes before landing where it did - here's roughly how it evolved from early sketches to the final assets.
 
-<MediaContainer src="/projects/karma-maze/visual-evolution-1.png" alt="Karma Maze visual evolution, part one" />
-<MediaContainer src="/projects/karma-maze/visual-evolution-2.png" alt="Karma Maze visual evolution, part two" />
+<div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+  <MediaContainer src="/projects/karma-maze/visual-evolution-1.png" alt="Karma Maze visual evolution, part one" className="mb-0" />
+  <MediaContainer src="/projects/karma-maze/visual-evolution-2.png" alt="Karma Maze visual evolution, part two" className="mb-0" />
+</div>
+<MediaContainer src="/projects/karma-maze/visual-evolution-3.png" alt="Karma Maze visual evolution, part three" />
 
 ## Future Development
 
-Planned enhancements include daily challenges, new power-ups, and advanced traps to deepen player engagement. Additionally, improved visual effects, expanded maze themes, and accessibility features will broaden the game's appeal. These features are aimed at increasing replayability and providing more diverse experiences for the player base.
+I'd like to add daily challenges, new power-ups, and tougher traps to give players more reasons to keep playing, plus more maze themes and some accessibility improvements.
 
 ## Final Thoughts
 
-Karma Maze exemplifies the synergy between creative game design and platform-specific development. The project demonstrates the potential for integrating traditional game mechanics into social platforms, providing a unique and engaging experience that's both fun and distinctly Reddit-centric.
+Karma Maze was my first real attempt at building something that felt native to a platform instead of just embedded in it. Getting a real game to live comfortably inside Reddit's ecosystem, karma system and all, was harder than I expected going in, but that's also what made it fun to build.

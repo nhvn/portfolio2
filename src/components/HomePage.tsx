@@ -50,7 +50,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
                 a: ({ node, ...props }) => (
                   <a
                     {...props}
-                    className="font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-[#547d73] hover:underline"
+                    className="font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-foreground hover:underline"
                   />
                 ),
               }}
@@ -92,13 +92,13 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
                       <div className="size-8 md:size-10 p-1 border rounded-none shadow ring-2 ring-border bg-muted flex-none" />
                     )}
                     <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                      <div className="text-sm font-semibold leading-none text-muted-foreground transition-colors group-hover:text-[#547d73]">
+                      <div className="text-sm font-semibold leading-none text-muted-foreground transition-colors group-hover:text-foreground">
                         {education.school}
                       </div>
-                      <div className="font-sans text-sm text-muted-foreground">{education.degree}</div>
+                      <div className="font-sans text-sm text-muted-foreground transition-colors group-hover:text-foreground">{education.degree}</div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground sm:text-right flex-none pl-11 sm:pl-0">
+                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-11 sm:pl-0">
                     <span>{education.start} - {education.end}</span>
                   </div>
                 </div>
@@ -117,7 +117,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
           <div className="flex flex-wrap gap-1.5">
             {DATA.skills.map((skill, id) => (
               <BlurFade key={skill.name} delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 10 + id * 0.05}>
-                <Badge variant="outline" className="h-7 px-3 text-xs font-medium border-[1.5px] border-foreground/35 text-muted-foreground transition-colors hover:text-[#547d73]">
+                <Badge variant="outline" className="h-7 px-3 text-xs font-medium border-[1.5px] border-foreground/35 text-muted-foreground transition-colors hover:text-foreground">
                   {skill.name}
                 </Badge>
               </BlurFade>
@@ -136,11 +136,13 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
       </BlurFade>
     </section>
   ),
-  photos: <PhotosSection />,
-  blog: (
-    <section id="blog">
-      <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 15}>
-        <div className={SECTION_CARD_CLASS}>
+  life: (
+    <section id="life">
+      <BlurFade delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 13}>
+        <div className="flex min-h-0 flex-col gap-y-6">
+          <h2 className="text-xl font-bold">{DATA.sections.life.heading}</h2>
+          <PhotosSection />
+          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Blog</h3>
           <BlogPreviewSection posts={posts} />
         </div>
       </BlurFade>
@@ -220,7 +222,7 @@ export default function HomePage({ posts }: { posts: BlogPost[] }) {
       <nav className="flex items-center gap-3 text-sm font-medium">
         <a
           href="/blog"
-          className="text-foreground hover:text-[#547d73] hover:underline underline-offset-4 transition-colors"
+          className="text-foreground hover:underline underline-offset-4 transition-colors"
         >
           Blog
         </a>
@@ -238,7 +240,7 @@ export default function HomePage({ posts }: { posts: BlogPost[] }) {
                   href={social.url}
                   target={isExternal ? "_blank" : undefined}
                   rel={isExternal ? "noopener noreferrer" : undefined}
-                  className="text-foreground hover:text-[#547d73] hover:underline underline-offset-4 transition-colors"
+                  className="text-foreground hover:underline underline-offset-4 transition-colors"
                 >
                   {label}
                 </a>

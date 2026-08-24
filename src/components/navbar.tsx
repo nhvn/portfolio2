@@ -12,7 +12,7 @@ import { DATA } from "@/data/resume";
 import { HERO_REVEAL_DELAY } from "@/lib/hero-timing";
 
 const ICON_CLASS =
-  "rounded-none cursor-pointer size-full p-0 text-muted-foreground hover:text-[#547d73] transition-colors";
+  "rounded-none cursor-pointer size-full p-0 text-muted-foreground hover:text-foreground transition-colors";
 
 const TOOLTIP_CLASS =
   "rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]";
@@ -26,6 +26,7 @@ export default function Navbar() {
       <Dock className="z-50 pointer-events-auto relative flex flex-col items-center justify-center gap-2 p-2 w-14">
         {DATA.navbar.map((item) => {
           const isExternal = item.href.startsWith("http");
+          const isHome = item.href === "/";
           return (
             <Tooltip key={item.href}>
               <TooltipTrigger asChild>
@@ -33,6 +34,12 @@ export default function Navbar() {
                   href={item.href}
                   target={isExternal ? "_blank" : undefined}
                   rel={isExternal ? "noopener noreferrer" : undefined}
+                  onClick={(e) => {
+                    if (isHome && window.location.pathname === "/") {
+                      e.preventDefault();
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
                 >
                   <DockIcon className={ICON_CLASS}>
                     <item.icon className="size-full rounded-sm overflow-hidden object-contain" />

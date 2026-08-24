@@ -14,7 +14,7 @@ export const HERO_MISTYPE = `Hey, im ${firstName.slice(0, 2).toLowerCase()}`;
 // Backspacing stops after removing everything but the leading "H", which is
 // then continued into the correct "Hi, I'm ..." instead of being erased too.
 export const HERO_MISTYPE_KEEP_LENGTH = 1;
-export const HERO_SUFFIX = " :D";
+export const HERO_SUFFIX = "";
 
 const SETTLE_BUFFER = 450; // ms after typing finishes before the rest of the page reveals
 const SKIP_SETTLE_BUFFER = 80; // ms buffer used when the intro is skipped
@@ -45,10 +45,12 @@ const HERO_TYPE_DURATION_MS = HERO_PLAY_INTRO
     (HERO_MISTYPE.length - HERO_MISTYPE_KEEP_LENGTH) * HERO_BACKSPACE_SPEED +
     HERO_PAUSE_BEFORE_RETYPE +
     (HERO_TEXT.length - HERO_MISTYPE_KEEP_LENGTH) * HERO_TYPE_SPEED +
-    HERO_PAUSE_BEFORE_SUFFIX +
-    HERO_SUFFIX.length * HERO_TYPE_SPEED +
-    HERO_PAUSE_BEFORE_SUFFIX_BACKSPACE +
-    HERO_SUFFIX.length * HERO_BACKSPACE_SPEED
+    (HERO_SUFFIX
+      ? HERO_PAUSE_BEFORE_SUFFIX +
+        HERO_SUFFIX.length * HERO_TYPE_SPEED +
+        HERO_PAUSE_BEFORE_SUFFIX_BACKSPACE +
+        HERO_SUFFIX.length * HERO_BACKSPACE_SPEED
+      : 0)
   : 0;
 
 // Seconds after which the rest of the page (avatar included) should begin

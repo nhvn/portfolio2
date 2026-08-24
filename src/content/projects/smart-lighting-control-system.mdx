@@ -11,20 +11,20 @@ contributions:
 
 ## Sketches
 
-The initial phase of the Smart Lighting Control System project involved detailed sketches and wireframes to visualize the design and layout of the system. These sketches helped in planning the user interface and the flow of the control system, ensuring a user-friendly and efficient design.
+We started with sketches and wireframes to figure out how the control system should actually be laid out before touching any hardware.
 
 <MediaContainer src="/projects/smart-lighting-control-system/sketches.png" alt="Smart Lighting Control System sketches" />
 
 ## Methodology
 
-The development process involved iterative prototyping and testing. I used Python for the core functionality and Flask for the web framework. Multithreading was implemented to allow parallel control of the lights, and Jinja templates were used to create the web UI. The system was tested thoroughly to ensure reliable performance.
+Python handled the core logic, Flask served the web UI, and multithreading let us control multiple lights at once instead of one at a time. Jinja templates powered the front end. We tested a lot along the way since this was controlling actual physical hardware.
 
 ## Results
 
-The Smart Lighting Control System was successfully developed and implemented. It provided precise control of lights, allowing users to customize schedules and manage up to 50 lights across 10 rooms. The system was reliable and user-friendly, meeting the project's goals.
+The system ended up managing up to 50 lights across 10 rooms with custom schedules, and held up reliably through testing.
 
 <MediaContainer src="/projects/smart-lighting-control-system/results.png" alt="Smart Lighting Control System results" />
 
 ## Final Thoughts
 
-Working on the Smart Lighting Control System project was a valuable experience that allowed me to apply my IoT development skills in a practical context. I learned a lot about integrating hardware and software to create a seamless and efficient solution. The project's success demonstrated the importance of iterative prototyping, thorough testing, and user-centric design.
+This was my first real IoT project, and getting hardware and software to work together reliably taught me a lot that pure web development never really forces you to deal with - timing, physical pins, things that just behave differently than clean software abstractions.

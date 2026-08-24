@@ -98,7 +98,8 @@ const { Content } = await render(entry);
         <MediaContainer
           src={project.image}
           alt={project.title}
-          className="h-64 md:h-80"
+          hoverVideoSrc={project.video || undefined}
+          className="max-w-lg mx-auto"
         />
       </div>
     )}

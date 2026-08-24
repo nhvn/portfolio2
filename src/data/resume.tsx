@@ -1,25 +1,8 @@
 import { Icons } from "@/components/icons";
-import { House, Library } from "lucide-react";
-import { ReactLight } from "@/components/ui/svgs/reactLight";
-import { Typescript } from "@/components/ui/svgs/typescript";
-import { Nodejs } from "@/components/ui/svgs/nodejs";
-import { Python } from "@/components/ui/svgs/python";
-import { Postgresql } from "@/components/ui/svgs/postgresql";
-import { Astro } from "@/components/ui/svgs/astro";
-import { NextjsIconDark } from "@/components/ui/svgs/nextjsIconDark";
-import { Javascript } from "@/components/ui/svgs/javascript";
-import { Flask } from "@/components/ui/svgs/flask";
-import { Pytorch } from "@/components/ui/svgs/pytorch";
-import { Snowflake } from "@/components/ui/svgs/snowflake";
-import { Mongodb } from "@/components/ui/svgs/mongodb";
-import { Redis } from "@/components/ui/svgs/redis";
-import { Firebase } from "@/components/ui/svgs/firebase";
-import { Swift } from "@/components/ui/svgs/swift";
-import { Tailwindcss } from "@/components/ui/svgs/tailwindcss";
-import { Cplusplus } from "@/components/ui/svgs/cplusplus";
+import { House, Library, LayoutGrid } from "lucide-react";
 
 export const DATA = {
-  name: "Alan Nhan - Software Engineer",
+  name: "Alan Nhan",
   initials: "AN",
   url: "https://alannhvn.com",
   location: "Los Angeles, CA",
@@ -40,13 +23,9 @@ export const DATA = {
       label: "Projects",
       text: "I've worked on a variety of projects, from hackathon-winning games to full-stack apps. Here are a few of my favorites.",
     },
-    photos: {
+    life: {
       order: 6, enabled: true,
       heading: "Life as of Recently",
-    },
-    blog: {
-      order: 7, enabled: false,
-      heading: "Latest Blog Posts",
     },
     contact: {
       order: 8, enabled: true,
@@ -56,37 +35,51 @@ export const DATA = {
   },
   photos: [
     { src: "/photos/cat.jpeg", alt: "My cat" },
+    { src: "/photos/hotpot.jpg", alt: "Hotpot" },
     { src: "/photos/camping.jpeg", alt: "Camping trip" },
+    { src: "/photos/burger.jpeg", alt: "Burger" },
+    { src: "/photos/kbbq.jpg", alt: "KBBQ" },
     { src: "/photos/golfing.JPG", alt: "Golfing" },
     { src: "/photos/unreal-poke.jpeg", alt: "Unreal Poke in Arcadia" },
-    { src: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=800&auto=format&fit=crop&q=80", alt: "Times Square, NYC" },
-    { src: "https://images.unsplash.com/photo-1592919505780-303950717480?w=800&auto=format&fit=crop&q=80", alt: "A day on the course" },
-    { src: "https://images.unsplash.com/photo-1580655653885-65763b2597d0?w=800&auto=format&fit=crop&q=80", alt: "Hollywood, LA" },
-    { src: "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&auto=format&fit=crop&q=80", alt: "Vintage tees" },
-    { src: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&auto=format&fit=crop&q=80", alt: "Coffee with friends" },
+    { src: "/photos/donuts.jpeg", alt: "Donuts" },
+    { src: "/photos/friends.jpeg", alt: "With friends" },
+    { src: "/photos/joes.jpeg", alt: "Joe's" },
+    { src: "/photos/tacos.jpeg", alt: "Tacos" },
+    { src: "/photos/sunset.jpg", alt: "Sunset" },
+    { src: "/photos/donuts2.jpeg", alt: "More donuts" },
+    { src: "/photos/snowboard.jpeg", alt: "Snowboarding" },
+    { src: "/photos/friendsgiving.jpeg", alt: "Friendsgiving" },
+    { src: "/photos/rainbow.jpeg", alt: "Rainbow" },
+    { src: "/photos/robot.jpeg", alt: "Robot" },
+    { src: "/photos/study.jpeg", alt: "Studying" },
   ] as { src: string; alt: string }[],
   skills: [
-    { name: "Python", icon: Python },
-    { name: "JavaScript", icon: Javascript },
-    { name: "TypeScript", icon: Typescript },
-    { name: "React", icon: ReactLight },
-    { name: "Next.js", icon: NextjsIconDark },
-    { name: "Node.js", icon: Nodejs },
-    { name: "Flask", icon: Flask },
-    { name: "PyTorch", icon: Pytorch },
-    { name: "PostgreSQL", icon: Postgresql },
-    { name: "MongoDB", icon: Mongodb },
-    { name: "Snowflake", icon: Snowflake },
-    { name: "Redis", icon: Redis },
-    { name: "Firebase", icon: Firebase },
-    { name: "Tailwind CSS", icon: Tailwindcss },
-    { name: "Swift", icon: Swift },
-    { name: "C++", icon: Cplusplus },
-    { name: "Astro", icon: Astro },
+    { name: "Python" },
+    { name: "SQL" },
+    { name: "JavaScript" },
+    { name: "TypeScript" },
+    { name: "React" },
+    { name: "Next.js" },
+    { name: "Node.js" },
+    { name: "Flask" },
+    { name: "PyTorch" },
+    { name: "PostgreSQL" },
+    { name: "MongoDB" },
+    { name: "Snowflake" },
+    { name: "Airflow" },
+    { name: "Redis" },
+    { name: "Firebase" },
+    { name: "AWS" },
+    { name: "Git" },
+    { name: "Tailwind CSS" },
+    { name: "Swift" },
+    { name: "C++" },
+    { name: "Astro" },
   ],
   navbar: [
     { href: "/", icon: House, label: "Home" },
-    { href: "/blog", icon: Library, label: "Blog" },
+    { href: "/#projects", icon: LayoutGrid, label: "Projects" },
+    { href: "/#life", icon: Library, label: "Life" },
   ],
   contact: {
     email: "alannhan443@gmail.com",
@@ -214,11 +207,6 @@ export const DATA = {
         "A generative AI platform for data augmentation and synthetic image generation, awarded honorable mention at the Dell x NVIDIA HackAI Hackathon. Uses a GAN-based model with a Stability AI API fallback, scaled with NVIDIA AI Workbench.",
       technologies: ["Python", "PyTorch", "Flask", "NVIDIA AI Workbench", "JavaScript"],
       links: [
-        {
-          type: "Demo",
-          href: "https://www.youtube.com/watch?v=acIyUkKU0uQ&t=6s",
-          icon: <Icons.globe className="size-3" />,
-        },
         {
           type: "Source",
           href: "https://github.com/nhvn/data-aug",

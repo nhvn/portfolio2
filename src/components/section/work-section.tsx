@@ -39,7 +39,7 @@ function WorkCard({ work }: { work: Work }) {
           <span className="flex items-center gap-x-2 min-w-0">
             <LogoImage src={work.logoUrl} alt={work.company} />
             <span className="flex-1 min-w-0 flex flex-col gap-0.5">
-              <span className="font-semibold leading-none flex items-center gap-2 text-muted-foreground transition-colors group-hover:text-[#547d73]">
+              <span className="font-semibold leading-none flex items-center gap-2 text-muted-foreground transition-colors group-hover:text-foreground">
                 {work.company}
                 <span className="relative inline-flex items-center w-3.5 h-3.5">
                   <ChevronRight

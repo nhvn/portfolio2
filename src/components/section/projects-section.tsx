@@ -7,12 +7,12 @@ import { HERO_REVEAL_DELAY } from "@/lib/hero-timing";
 import { ChevronDown } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
-const VISIBLE_COUNT = 4;
+const MOBILE_VISIBLE_COUNT = 3;
 
 export default function ProjectsSection() {
     const [expanded, setExpanded] = useState(false);
-    const visibleProjects = DATA.projects.slice(0, VISIBLE_COUNT);
-    const extraProjects = DATA.projects.slice(VISIBLE_COUNT);
+    const visibleProjects = DATA.projects.slice(0, MOBILE_VISIBLE_COUNT);
+    const extraProjects = DATA.projects.slice(MOBILE_VISIBLE_COUNT);
     const hasMore = extraProjects.length > 0;
 
     return (
@@ -24,8 +24,10 @@ export default function ProjectsSection() {
                         {DATA.sections.projects.text}
                     </p>
                 </div>
-                <div className="grid grid-cols-2 gap-3 max-w-[800px] w-full mx-auto">
-                    {visibleProjects.map((project, id) => (
+
+                {/* Desktop: 2-column grid, all projects always visible */}
+                <div className="hidden sm:grid sm:grid-cols-2 gap-3 max-w-[800px] w-full mx-auto">
+                    {DATA.projects.map((project, id) => (
                         <BlurFade
                             key={project.title}
                             delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
@@ -45,22 +47,41 @@ export default function ProjectsSection() {
                         </BlurFade>
                     ))}
                 </div>
-                <AnimatePresence initial={false}>
-                    {expanded && (
-                        <motion.div
-                            key="extra-projects"
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.35, ease: "easeInOut" }}
-                            className="overflow-hidden max-w-[800px] w-full mx-auto"
+
+                {/* Mobile: single column, 3 visible + smooth expand */}
+                <div className="flex sm:hidden flex-col gap-3 w-full">
+                    {visibleProjects.map((project, id) => (
+                        <BlurFade
+                            key={project.title}
+                            delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
                         >
-                            <div className="grid grid-cols-2 gap-3 pt-3">
-                                {extraProjects.map((project) => (
+                            <ProjectCard
+                                href={project.href}
+                                slug={project.slug}
+                                key={project.title}
+                                title={project.title}
+                                blurb={project.blurb}
+                                dates={project.dates}
+                                image={project.image}
+                                video={project.video}
+                                links={project.links}
+                            />
+                        </BlurFade>
+                    ))}
+                    <AnimatePresence initial={false}>
+                        {expanded &&
+                            extraProjects.map((project) => (
+                                <motion.div
+                                    key={project.title}
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    transition={{ duration: 0.35, ease: "easeInOut" }}
+                                    className="overflow-hidden"
+                                >
                                     <ProjectCard
                                         href={project.href}
                                         slug={project.slug}
-                                        key={project.title}
                                         title={project.title}
                                         blurb={project.blurb}
                                         dates={project.dates}
@@ -68,24 +89,23 @@ export default function ProjectsSection() {
                                         video={project.video}
                                         links={project.links}
                                     />
-                                ))}
-                            </div>
-                        </motion.div>
+                                </motion.div>
+                            ))}
+                    </AnimatePresence>
+                    {hasMore && (
+                        <button
+                            type="button"
+                            onClick={() => setExpanded((v) => !v)}
+                            className="mx-auto flex items-center gap-1.5 text-sm font-medium border border-border rounded-xl px-4 py-1.5 hover:bg-muted/60 transition-colors cursor-pointer"
+                        >
+                            {expanded ? "Show less" : "Show more projects"}
+                            <ChevronDown
+                                className={`size-3.5 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
+                                aria-hidden
+                            />
+                        </button>
                     )}
-                </AnimatePresence>
-                {hasMore && (
-                    <button
-                        type="button"
-                        onClick={() => setExpanded((v) => !v)}
-                        className="mx-auto flex items-center gap-1.5 text-sm font-medium border border-border rounded-xl px-4 py-1.5 hover:bg-muted/60 transition-colors cursor-pointer"
-                    >
-                        {expanded ? "Show less" : "Show more projects"}
-                        <ChevronDown
-                            className={`size-3.5 transition-transform duration-200 ${expanded ? "rotate-180" : ""}`}
-                            aria-hidden
-                        />
-                    </button>
-                )}
+                </div>
             </div>
         </section>
     );

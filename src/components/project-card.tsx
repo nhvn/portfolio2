@@ -64,19 +64,19 @@ export function ProjectCard({
         className="absolute inset-0 block"
         aria-label={title}
       >
-        {video ? (
+        {image ? <ProjectImage src={image} alt={title} /> : !video && <div className="w-full h-full bg-muted" />}
+        {video && (
           <video
             src={video}
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className={cn(
+              "w-full h-full object-cover",
+              image && "absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            )}
           />
-        ) : image ? (
-          <ProjectImage src={image} alt={title} />
-        ) : (
-          <div className="w-full h-full bg-muted" />
         )}
 
         <div className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-4 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
