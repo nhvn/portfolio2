@@ -5,6 +5,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function formatDateShort(date: string) {
+  if (!date.includes("T")) {
+    date = `${date}T00:00:00`;
+  }
+  return new Date(date).toLocaleDateString("en-us", {
+    month: "numeric",
+    day: "numeric",
+    year: "2-digit",
+    timeZone: "UTC",
+  });
+}
+
 export function formatDate(date: string) {
   let currentDate = new Date().getTime();
   if (!date.includes("T")) {

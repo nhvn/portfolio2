@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
 import TypewriterText from "@/components/magicui/typewriter-text";
@@ -37,6 +37,105 @@ interface BlogPost {
   publishedAt: string;
 }
 
+type Education = (typeof DATA.education)[number];
+
+function EducationRow({ education, delay }: { education: Education; delay: number }) {
+  // Touch devices have no real :hover, so press-and-hold stands in for it.
+  const [isPressed, setIsPressed] = useState(false);
+  const touchProps = {
+    onTouchStart: () => setIsPressed(true),
+    onTouchEnd: () => setIsPressed(false),
+    onTouchCancel: () => setIsPressed(false),
+  };
+
+  return (
+    <BlurFade delay={delay}>
+      <div
+        className="group flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1 sm:justify-between"
+        {...touchProps}
+      >
+        <div className="flex items-center gap-x-3 min-w-0">
+          {education.logoUrl ? (
+            <img
+              src={education.logoUrl}
+              alt={education.school}
+              className="size-8 md:size-10 p-1 border rounded-none shadow ring-2 ring-border overflow-hidden object-contain flex-none"
+            />
+          ) : (
+            <div className="size-8 md:size-10 p-1 border rounded-none shadow ring-2 ring-border bg-muted flex-none" />
+          )}
+          <div className="flex-1 min-w-0 flex flex-col gap-0.5">
+            <div
+              className={cn(
+                "text-sm font-semibold leading-none text-muted-foreground transition-colors group-hover:text-foreground",
+                isPressed && "text-foreground"
+              )}
+            >
+              {education.school}
+            </div>
+            <div
+              className={cn(
+                "font-sans text-sm text-muted-foreground transition-colors group-hover:text-foreground",
+                isPressed && "text-foreground"
+              )}
+            >
+              {education.degree}
+            </div>
+          </div>
+        </div>
+        <div
+          className={cn(
+            "flex items-center gap-1 text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-11 sm:pl-0",
+            isPressed && "text-foreground"
+          )}
+        >
+          <span>{education.start} - {education.end}</span>
+        </div>
+      </div>
+    </BlurFade>
+  );
+}
+
+function SkillBadge({ name, delay }: { name: string; delay: number }) {
+  // Touch devices have no real :hover, so press-and-hold stands in for it.
+  const [isPressed, setIsPressed] = useState(false);
+
+  return (
+    <BlurFade delay={delay}>
+      <Badge
+        variant="outline"
+        className={cn(
+          "h-7 px-3 text-xs font-medium border-[1.5px] border-foreground/35 text-muted-foreground transition-colors hover:text-foreground",
+          isPressed && "text-foreground"
+        )}
+        onTouchStart={() => setIsPressed(true)}
+        onTouchEnd={() => setIsPressed(false)}
+        onTouchCancel={() => setIsPressed(false)}
+      >
+        {name}
+      </Badge>
+    </BlurFade>
+  );
+}
+
+function SummaryLink({ node, ...props }: React.ComponentProps<"a"> & { node?: unknown }) {
+  // Touch devices have no real :hover, so press-and-hold stands in for it.
+  const [isPressed, setIsPressed] = useState(false);
+
+  return (
+    <a
+      {...props}
+      className={cn(
+        "font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-foreground hover:underline",
+        isPressed && "text-foreground underline"
+      )}
+      onTouchStart={() => setIsPressed(true)}
+      onTouchEnd={() => setIsPressed(false)}
+      onTouchCancel={() => setIsPressed(false)}
+    />
+  );
+}
+
 function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode> {
   return {
   about: (
@@ -45,16 +144,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
         <div className={cn("flex min-h-0 flex-col gap-y-4", SECTION_CARD_CLASS)}>
           <h2 className="text-xl font-bold">{DATA.sections.about.heading}</h2>
           <div className="prose max-w-full text-pretty font-sans leading-relaxed text-muted-foreground dark:prose-invert">
-            <Markdown
-              components={{
-                a: ({ node, ...props }) => (
-                  <a
-                    {...props}
-                    className="font-semibold text-muted-foreground no-underline underline-offset-4 transition-colors hover:text-foreground hover:underline"
-                  />
-                ),
-              }}
-            >
+            <Markdown components={{ a: SummaryLink }}>
               {DATA.summary}
             </Markdown>
           </div>
@@ -79,30 +169,11 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
           <h2 className="text-xl font-bold">{DATA.sections.education.heading}</h2>
           <div className="flex flex-col gap-8">
             {DATA.education.map((education, index) => (
-              <BlurFade key={education.school} delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 8 + index * 0.05}>
-                <div className="group flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1 sm:justify-between">
-                  <div className="flex items-center gap-x-3 min-w-0">
-                    {education.logoUrl ? (
-                      <img
-                        src={education.logoUrl}
-                        alt={education.school}
-                        className="size-8 md:size-10 p-1 border rounded-none shadow ring-2 ring-border overflow-hidden object-contain flex-none"
-                      />
-                    ) : (
-                      <div className="size-8 md:size-10 p-1 border rounded-none shadow ring-2 ring-border bg-muted flex-none" />
-                    )}
-                    <div className="flex-1 min-w-0 flex flex-col gap-0.5">
-                      <div className="text-sm font-semibold leading-none text-muted-foreground transition-colors group-hover:text-foreground">
-                        {education.school}
-                      </div>
-                      <div className="font-sans text-sm text-muted-foreground transition-colors group-hover:text-foreground">{education.degree}</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-11 sm:pl-0">
-                    <span>{education.start} - {education.end}</span>
-                  </div>
-                </div>
-              </BlurFade>
+              <EducationRow
+                key={education.school}
+                education={education}
+                delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 8 + index * 0.05}
+              />
             ))}
           </div>
         </div>
@@ -116,11 +187,7 @@ function getSectionComponents(posts: BlogPost[]): Record<string, React.ReactNode
           <h2 className="text-xl font-bold">{DATA.sections.skills.heading}</h2>
           <div className="flex flex-wrap gap-1.5">
             {DATA.skills.map((skill, id) => (
-              <BlurFade key={skill.name} delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 10 + id * 0.05}>
-                <Badge variant="outline" className="h-7 px-3 text-xs font-medium border-[1.5px] border-foreground/35 text-muted-foreground transition-colors hover:text-foreground">
-                  {skill.name}
-                </Badge>
-              </BlurFade>
+              <SkillBadge key={skill.name} name={skill.name} delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 10 + id * 0.05} />
             ))}
           </div>
         </div>

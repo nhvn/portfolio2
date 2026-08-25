@@ -196,7 +196,7 @@ export const DATA = {
         },
       ],
       image: "/projects/karma-maze.png",
-      video: "",
+      video: "/projects/karma-maze.mp4",
     },
     {
       title: "AugmentAI",
@@ -223,7 +223,7 @@ export const DATA = {
         },
       ],
       image: "/projects/augmentai.png",
-      video: "",
+      video: "/projects/augmentai.mp4",
     },
     {
       title: "BeFit v2",
@@ -310,7 +310,7 @@ export const DATA = {
         },
       ],
       image: "/projects/pumpkin-lostte-game.png",
-      video: "",
+      video: "/projects/pumpkin-lostte-game.mp4",
     },
   ],
 } as const;

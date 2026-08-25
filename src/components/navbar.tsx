@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import BlurFade from "@/components/magicui/blur-fade";
 import { Dock, DockIcon } from "@/components/magicui/dock";
 import { ModeToggle } from "@/components/mode-toggle";
@@ -18,36 +17,17 @@ const ICON_CLASS =
 const TOOLTIP_CLASS =
   "rounded-xl bg-primary text-primary-foreground px-4 py-2 text-sm shadow-[0_10px_40px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)]";
 
-// Matches Tailwind's `lg` cutoff — below it the dock sits bottom-center and
-// runs horizontally instead of down the left edge, so tooltips need to pop
-// upward instead of to the side.
-const DESKTOP_BREAKPOINT = "(min-width: 1024px)";
-
-function useIsDesktop() {
-  const [isDesktop, setIsDesktop] = useState(
-    () => typeof window !== "undefined" && window.matchMedia(DESKTOP_BREAKPOINT).matches
-  );
-
-  useEffect(() => {
-    const mql = window.matchMedia(DESKTOP_BREAKPOINT);
-    const onChange = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
-    mql.addEventListener("change", onChange);
-    return () => mql.removeEventListener("change", onChange);
-  }, []);
-
-  return isDesktop;
-}
-
 export default function Navbar() {
-  const isDesktop = useIsDesktop();
-  const tooltipSide = isDesktop ? "right" : "top";
-
   return (
+    // The full dock has nowhere to sit on mobile without covering page
+    // content (bottom-center blocked link taps, and there's no room on the
+    // side), so it's desktop-only. Mobile just follows the system color
+    // scheme with no manual override.
     <BlurFade
       delay={HERO_REVEAL_DELAY}
-      className="pointer-events-none fixed z-30 bottom-4 left-1/2 -translate-x-1/2 lg:bottom-auto lg:left-4 lg:top-1/2 lg:translate-x-0 lg:-translate-y-1/2"
+      className="hidden lg:block pointer-events-none fixed z-30 left-4 top-1/2 -translate-y-1/2"
     >
-      <Dock className="z-50 pointer-events-auto relative flex flex-row lg:flex-col items-center justify-center gap-2 p-2 h-14 w-auto lg:h-auto lg:w-14 bg-background border border-border/60 lg:bg-transparent lg:border-none">
+      <Dock className="z-50 pointer-events-auto relative flex flex-col items-center justify-center gap-2 p-2 h-auto w-14">
         {DATA.navbar.map((item) => {
           const isExternal = item.href.startsWith("http");
           const isHome = item.href === "/";
@@ -70,17 +50,14 @@ export default function Navbar() {
                   </DockIcon>
                 </a>
               </TooltipTrigger>
-              <TooltipContent side={tooltipSide} sideOffset={8} className={TOOLTIP_CLASS}>
+              <TooltipContent side="right" sideOffset={8} className={TOOLTIP_CLASS}>
                 <p>{item.label}</p>
                 <TooltipArrow className="fill-primary" />
               </TooltipContent>
             </Tooltip>
           );
         })}
-        <Separator
-          orientation="horizontal"
-          className="h-2/3 w-px my-auto lg:h-px lg:w-2/3 lg:mx-auto lg:my-0 bg-black dark:bg-border"
-        />
+        <Separator orientation="horizontal" className="h-px w-2/3 mx-auto bg-black dark:bg-border" />
         {Object.entries(DATA.contact.social)
           .filter(([_, social]) => social.navbar)
           .map(([name, social], index) => {
@@ -99,24 +76,21 @@ export default function Navbar() {
                     </DockIcon>
                   </a>
                 </TooltipTrigger>
-                <TooltipContent side={tooltipSide} sideOffset={8} className={TOOLTIP_CLASS}>
+                <TooltipContent side="right" sideOffset={8} className={TOOLTIP_CLASS}>
                   <p>{name === "email" ? "Email" : name}</p>
                   <TooltipArrow className="fill-primary" />
                 </TooltipContent>
               </Tooltip>
             );
           })}
-        <Separator
-          orientation="horizontal"
-          className="h-2/3 w-px my-auto lg:h-px lg:w-2/3 lg:mx-auto lg:my-0 bg-black dark:bg-border"
-        />
+        <Separator orientation="horizontal" className="h-px w-2/3 mx-auto bg-black dark:bg-border" />
         <Tooltip>
           <TooltipTrigger asChild>
             <DockIcon className={ICON_CLASS}>
               <ModeToggle className="size-full cursor-pointer" />
             </DockIcon>
           </TooltipTrigger>
-          <TooltipContent side={tooltipSide} sideOffset={8} className={TOOLTIP_CLASS}>
+          <TooltipContent side="right" sideOffset={8} className={TOOLTIP_CLASS}>
             <p>Night mode</p>
             <TooltipArrow className="fill-primary" />
           </TooltipContent>

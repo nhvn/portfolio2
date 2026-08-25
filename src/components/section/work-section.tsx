@@ -32,14 +32,30 @@ function LogoImage({ src, alt }: { src: string; alt: string }) {
 type Work = (typeof DATA.work)[number];
 
 function WorkCard({ work }: { work: Work }) {
+  // Touch devices have no real :hover, so press-and-hold stands in for it.
+  const [isPressed, setIsPressed] = useState(false);
+  const touchProps = {
+    onTouchStart: () => setIsPressed(true),
+    onTouchEnd: () => setIsPressed(false),
+    onTouchCancel: () => setIsPressed(false),
+  };
+
   return (
     <AccordionItem value={work.company} className="border-b-0">
-      <AccordionTrigger className="hover:no-underline p-0 cursor-pointer transition-colors rounded-none group [&>svg]:hidden">
+      <AccordionTrigger
+        className="hover:no-underline p-0 cursor-pointer transition-colors rounded-none group [&>svg]:hidden"
+        {...touchProps}
+      >
         <span className="flex flex-col sm:flex-row sm:items-center gap-x-3 gap-y-1 sm:justify-between w-full text-left">
           <span className="flex items-center gap-x-2 min-w-0">
             <LogoImage src={work.logoUrl} alt={work.company} />
             <span className="flex-1 min-w-0 flex flex-col gap-0.5">
-              <span className="font-semibold leading-none flex items-center gap-2 text-muted-foreground transition-colors group-hover:text-foreground">
+              <span
+                className={cn(
+                  "font-semibold leading-none flex items-center gap-2 text-muted-foreground transition-colors group-hover:text-foreground",
+                  isPressed && "text-foreground"
+                )}
+              >
                 {work.company}
                 <span className="relative inline-flex items-center w-3.5 h-3.5">
                   <ChevronRight
@@ -47,7 +63,8 @@ function WorkCard({ work }: { work: Work }) {
                       "absolute h-3.5 w-3.5 shrink-0 text-muted-foreground stroke-2 transition-all duration-300 ease-out",
                       "translate-x-0 opacity-0",
                       "group-hover:translate-x-1 group-hover:opacity-100",
-                      "group-data-[state=open]:opacity-0 group-data-[state=open]:translate-x-0"
+                      "group-data-[state=open]:opacity-0 group-data-[state=open]:translate-x-0",
+                      isPressed && "translate-x-1 opacity-100"
                     )}
                   />
                   <ChevronDown
@@ -59,12 +76,22 @@ function WorkCard({ work }: { work: Work }) {
                   />
                 </span>
               </span>
-              <span className="font-sans text-xs text-muted-foreground block transition-colors group-hover:text-foreground">
+              <span
+                className={cn(
+                  "font-sans text-xs text-muted-foreground block transition-colors group-hover:text-foreground",
+                  isPressed && "text-foreground"
+                )}
+              >
                 {work.title}
               </span>
             </span>
           </span>
-          <span className="text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-9 sm:pl-0">
+          <span
+            className={cn(
+              "text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground sm:text-right flex-none pl-9 sm:pl-0",
+              isPressed && "text-foreground"
+            )}
+          >
             {work.start} - {work.end ?? DATA.sections.work.presentLabel}
           </span>
         </span>

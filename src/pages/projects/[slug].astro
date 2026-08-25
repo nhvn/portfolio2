@@ -99,6 +99,7 @@ const { Content } = await render(entry);
     {project.image && (
       <div class="mt-6">
         <MediaContainer
+          client:load
           src={project.image}
           alt={project.title}
           hoverVideoSrc={project.video || undefined}

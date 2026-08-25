@@ -77,8 +77,14 @@ export default function PhotosSection() {
     return () => mql.removeEventListener("change", onChange);
   }, []);
 
+  const isMobile = pageSize === MOBILE_PAGE_SIZE;
   const start = page * pageSize;
   const pagePhotos = photos.slice(start, start + pageSize);
+  // Left column is intentionally wider (3:2) and gets any leftover photo
+  // on a partial last page, so it always reads as the more prominent side.
+  const leftCount = Math.ceil(pagePhotos.length / 2);
+  const leftPhotos = pagePhotos.slice(0, leftCount);
+  const rightPhotos = pagePhotos.slice(leftCount);
 
   // The stutter on click wasn't the transition itself — it was the browser
   // decoding a handful of brand-new <img> elements for the first time at
@@ -123,16 +129,45 @@ export default function PhotosSection() {
           exit={{ x: "-100%" }}
           transition={SLIDE_TRANSITION}
           onClick={totalPages > 1 ? goNext : undefined}
-          className={`absolute inset-x-0 top-0 columns-2 sm:columns-3 gap-2 ${totalPages > 1 ? "cursor-pointer" : ""}`}
+          className={`absolute inset-x-0 top-0 gap-2 ${
+            isMobile ? "flex items-start" : "columns-3"
+          } ${totalPages > 1 ? "cursor-pointer" : ""}`}
         >
-          {pagePhotos.map((photo) => (
-            <img
-              key={photo.src}
-              src={photo.src}
-              alt={photo.alt}
-              className="w-full h-auto rounded-[12px] mb-2 break-inside-avoid"
-            />
-          ))}
+          {isMobile ? (
+            <>
+              <div className="flex flex-col gap-2" style={{ flex: 3 }}>
+                {leftPhotos.map((photo) => (
+                  <img
+                    key={photo.src}
+                    src={photo.src}
+                    alt={photo.alt}
+                    className="w-full h-auto rounded-[12px]"
+                  />
+                ))}
+              </div>
+              {rightPhotos.length > 0 && (
+                <div className="flex flex-col gap-2" style={{ flex: 2 }}>
+                  {rightPhotos.map((photo) => (
+                    <img
+                      key={photo.src}
+                      src={photo.src}
+                      alt={photo.alt}
+                      className="w-full h-auto rounded-[12px]"
+                    />
+                  ))}
+                </div>
+              )}
+            </>
+          ) : (
+            pagePhotos.map((photo) => (
+              <img
+                key={photo.src}
+                src={photo.src}
+                alt={photo.alt}
+                className="w-full h-auto rounded-[12px] mb-2 break-inside-avoid"
+              />
+            ))
+          )}
         </MeasuredPanel>
       </AnimatePresence>
     </motion.div>

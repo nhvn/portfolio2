@@ -56,13 +56,26 @@ export function ProjectCard({
 }: Props) {
   const detailHref = slug ? `/projects/${slug}` : href || "#";
   const isInternal = Boolean(slug);
+  const [isPressed, setIsPressed] = useState(false);
+  // Touch devices have no real :hover, so press-and-hold stands in for it —
+  // forced via inline style (always wins over the group-hover classes)
+  // rather than toggling the classes themselves, so mouse hover on desktop
+  // is completely untouched.
+  const revealStyle = isPressed ? { opacity: 1 } : undefined;
+  const touchProps = {
+    onTouchStart: () => setIsPressed(true),
+    onTouchEnd: () => setIsPressed(false),
+    onTouchCancel: () => setIsPressed(false),
+  };
 
   return (
     <div
       className={cn(
-        "group relative aspect-[3/2] w-full overflow-hidden rounded-[12px] border border-border @container",
+        "group relative aspect-[3/2] w-full overflow-hidden rounded-[12px] border border-border @container select-none",
         className
       )}
+      style={{ WebkitTouchCallout: "none" }}
+      {...touchProps}
     >
       {award && <AwardRibbon label={award} />}
       <a
@@ -79,6 +92,7 @@ export function ProjectCard({
             loop
             muted
             playsInline
+            style={revealStyle}
             className={cn(
               "w-full h-full object-cover",
               image && "absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -86,7 +100,10 @@ export function ProjectCard({
           />
         )}
 
-        <div className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-4 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+        <div
+          style={revealStyle}
+          className="absolute inset-0 flex flex-col justify-end gap-1 bg-gradient-to-t from-black/85 via-black/35 to-transparent p-4 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
+        >
           <h3 className="flex items-center gap-1.5 text-sm font-semibold text-white leading-tight">
             {playable && <Gamepad2 className="size-3.5 shrink-0" aria-label="Playable" />}
             {title}
@@ -99,7 +116,10 @@ export function ProjectCard({
       </a>
 
       {links && links.length > 0 && (
-        <div className="absolute top-2 right-2 flex flex-wrap gap-2 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100">
+        <div
+          style={revealStyle}
+          className="absolute top-2 right-2 flex flex-wrap gap-2 opacity-0 transition-opacity duration-500 ease-in-out group-hover:opacity-100"
+        >
           {links.map((link, idx) => (
             <a
               href={link.href}
