@@ -11,8 +11,8 @@ type Photo = { src: string; alt: string; width: number; height: number };
 const ROWS_PER_PAGE = 2;
 
 const GAP_PX = 8;
-const MIN_ROW_HEIGHT = 80;
-const MAX_ROW_HEIGHT = 150;
+const MIN_ROW_HEIGHT = 110;
+const MAX_ROW_HEIGHT = 190;
 // A row can grow at most this much past the target height (used for a
 // leftover last row that doesn't have enough photos to justify normally) —
 // keeps one or two stray photos from stretching into a giant tile.
@@ -134,7 +134,7 @@ export default function PhotosSection() {
     return () => observer.disconnect();
   }, []);
 
-  const targetHeight = Math.min(MAX_ROW_HEIGHT, Math.max(MIN_ROW_HEIGHT, containerWidth / 5));
+  const targetHeight = Math.min(MAX_ROW_HEIGHT, Math.max(MIN_ROW_HEIGHT, containerWidth / 4));
   // Rows are computed once across the whole photo set, then sliced into
   // pages — not the other way around — so a page boundary never falls
   // mid-row and every non-final page ends up equally full.
