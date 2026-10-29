@@ -1,6 +1,6 @@
 // Shared with anything that needs to visually blend into a "colored" section
 // (e.g. the Work timeline's icon-masking background), so they never drift apart.
-export const SECTION_CARD_COLOR_CLASS = "bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.2_0_0)]";
+export const SECTION_CARD_COLOR_CLASS = "bg-[oklch(0.945_0_0)] dark:bg-[oklch(0.255_0.004_265)]";
 
 // Negative margin exactly cancels the padding, so a card's text still lines
 // up with plain (non-card) section text at the same left edge, while the
