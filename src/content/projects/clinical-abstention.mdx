@@ -1,0 +1,43 @@
+---
+role: "ML Pipeline Engineer"
+team: "Four other USC students"
+duration: "Sep 2026 - Present"
+contributions:
+  - "Restructured the MED-COPILOT runner's experiment inputs and outputs so every run writes to its own timestamped directory and never overwrites a previous one"
+  - "Added a run.json manifest recording run status, branch, commit, and fingerprints of the input and reference resources, so each result can be traced back to exactly what produced it"
+  - "Made the batch runner fault-tolerant: one failing patient no longer stops the batch, and every patient gets an explicit completed, failed, or not-processed status"
+  - "Split the model's reply into separate assessment and plan fields, saving the raw reply alongside them and handling missing, empty, or repeated sections"
+  - "Wrote unit tests covering the runner and its helpers, with external APIs mocked"
+---
+
+## Intro
+
+This is my team's project for CSCI 566 (Deep Learning and its Applications) at USC. The question we're asking: when a patient record doesn't contain enough evidence for a diagnosis, can a small language model recognize that and hold back, instead of confidently guessing?
+
+The project is still in progress, so this page will grow as we get further.
+
+## Problem
+
+Clinical AI tools are usually judged on whether they get the diagnosis right. But in practice, knowing when *not* to answer matters just as much, and a model that always produces a confident diagnosis is dangerous when the record is thin. Testing this needs data where we control exactly what the model can and can't see, and real patient records make that hard.
+
+## Approach
+
+<MediaContainer src="/projects/clinical-abstention/architecture.png" alt="Clinical Abstention pipeline architecture" />
+
+### Synthetic data
+
+We generate a 10,000-patient synthetic EHR cohort with Synthea. The setup is pinned down tightly enough that the same command produces byte-identical output on any machine. From that cohort we picked seven target conditions, split between history-driven, acute/symptom-driven, and a demographic control.
+
+Each patient's record is then cut off at the moment of diagnosis, so the model only ever sees what a clinician would have had beforehand. Leak checks scan for any remaining trace of the answer, and the records are converted into SOAP-style notes (Subjective + Objective only).
+
+### MED-COPILOT baseline
+
+As a baseline, we run the notes through an adapted MED-COPILOT pipeline. It retrieves similar patients (BioClinicalBERT embeddings, FAISS, and a cross-encoder reranker), pulls evidence from a GraphRAG knowledge graph built on NICE and WHO clinical guidelines, and asks an LLM for an assessment and a plan.
+
+## What I Worked On
+
+My part so far has been the experiment runner around the MED-COPILOT baseline. Since we're going to run many experiments and compare them, every run needs to be reproducible and traceable. Each run now gets its own output directory with a manifest of exactly what went into it, plus one result line per patient. A single bad patient no longer takes down a whole batch. I also separated the model's assessment from its plan, since the diagnosis is what we're actually evaluating.
+
+## What's Next
+
+Next up is evaluating how often the model commits to a diagnosis versus abstaining, and comparing small models against the baseline.

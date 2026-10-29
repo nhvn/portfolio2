@@ -7,12 +7,32 @@ import { HERO_REVEAL_DELAY } from "@/lib/hero-timing";
 import { ChevronDown } from "lucide-react";
 
 const BLUR_FADE_DELAY = 0.04;
-const MOBILE_VISIBLE_COUNT = 3;
+const VISIBLE_COUNT = 4;
+
+type Project = (typeof DATA.projects)[number];
+
+function Card({ project }: { project: Project }) {
+    return (
+        <ProjectCard
+            href={project.href}
+            slug={project.slug}
+            title={project.title}
+            blurb={project.blurb}
+            dates={project.dates}
+            image={project.image}
+            video={project.video}
+            playable={project.playable}
+            inProgress={project.inProgress}
+            award={project.award}
+            links={project.links}
+        />
+    );
+}
 
 export default function ProjectsSection() {
     const [expanded, setExpanded] = useState(false);
-    const visibleProjects = DATA.projects.slice(0, MOBILE_VISIBLE_COUNT);
-    const extraProjects = DATA.projects.slice(MOBILE_VISIBLE_COUNT);
+    const visibleProjects = DATA.projects.slice(0, VISIBLE_COUNT);
+    const extraProjects = DATA.projects.slice(VISIBLE_COUNT);
     const hasMore = extraProjects.length > 0;
 
     return (
@@ -25,84 +45,42 @@ export default function ProjectsSection() {
                     </p>
                 </div>
 
-                {/* Desktop: 2-column grid, all projects always visible */}
-                <div className="hidden sm:grid sm:grid-cols-2 gap-3 max-w-[800px] w-full mx-auto">
-                    {DATA.projects.map((project, id) => (
-                        <BlurFade
-                            key={project.title}
-                            delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
-                            className="h-full"
-                        >
-                            <ProjectCard
-                                href={project.href}
-                                slug={project.slug}
+                {/* First few projects always visible, the rest smoothly expand below */}
+                <div className="flex flex-col max-w-[800px] w-full mx-auto">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {visibleProjects.map((project, id) => (
+                            <BlurFade
                                 key={project.title}
-                                title={project.title}
-                                blurb={project.blurb}
-                                dates={project.dates}
-                                image={project.image}
-                                video={project.video}
-                                playable={project.playable}
-                                award={project.award}
-                                links={project.links}
-                            />
-                        </BlurFade>
-                    ))}
-                </div>
-
-                {/* Mobile: single column, 3 visible + smooth expand */}
-                <div className="flex sm:hidden flex-col gap-3 w-full">
-                    {visibleProjects.map((project, id) => (
-                        <BlurFade
-                            key={project.title}
-                            delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
-                        >
-                            <ProjectCard
-                                href={project.href}
-                                slug={project.slug}
-                                key={project.title}
-                                title={project.title}
-                                blurb={project.blurb}
-                                dates={project.dates}
-                                image={project.image}
-                                video={project.video}
-                                playable={project.playable}
-                                award={project.award}
-                                links={project.links}
-                            />
-                        </BlurFade>
-                    ))}
+                                delay={HERO_REVEAL_DELAY + BLUR_FADE_DELAY * 12 + id * 0.05}
+                                className="h-full"
+                            >
+                                <Card project={project} />
+                            </BlurFade>
+                        ))}
+                    </div>
                     <AnimatePresence initial={false}>
-                        {expanded &&
-                            extraProjects.map((project) => (
-                                <motion.div
-                                    key={project.title}
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    transition={{ duration: 0.35, ease: "easeInOut" }}
-                                    className="overflow-hidden"
-                                >
-                                    <ProjectCard
-                                        href={project.href}
-                                        slug={project.slug}
-                                        title={project.title}
-                                        blurb={project.blurb}
-                                        dates={project.dates}
-                                        image={project.image}
-                                        video={project.video}
-                                        playable={project.playable}
-                                        award={project.award}
-                                        links={project.links}
-                                    />
-                                </motion.div>
-                            ))}
+                        {expanded && (
+                            <motion.div
+                                key="extra-projects"
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: "auto", opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                transition={{ duration: 0.35, ease: "easeInOut" }}
+                                className="overflow-hidden"
+                            >
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                                    {extraProjects.map((project) => (
+                                        <Card key={project.title} project={project} />
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
                     </AnimatePresence>
                     {hasMore && (
                         <button
                             type="button"
                             onClick={() => setExpanded((v) => !v)}
-                            className="mx-auto flex items-center gap-1.5 text-sm font-medium border border-border rounded-xl px-4 py-1.5 hover:bg-muted/60 transition-colors cursor-pointer"
+                            className="mt-4 mx-auto flex items-center gap-1.5 text-sm font-medium border border-border rounded-xl px-4 py-1.5 hover:bg-muted/60 transition-colors cursor-pointer"
                         >
                             {expanded ? "Show less" : "Show more projects"}
                             <ChevronDown

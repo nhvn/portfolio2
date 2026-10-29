@@ -32,6 +32,7 @@ interface Props {
   image?: string;
   video?: string;
   playable?: boolean;
+  inProgress?: boolean;
   award?: string;
   links?: readonly {
     icon: React.ReactNode;
@@ -50,6 +51,7 @@ export function ProjectCard({
   image,
   video,
   playable,
+  inProgress,
   award,
   links,
   className,
@@ -78,6 +80,12 @@ export function ProjectCard({
       {...touchProps}
     >
       {award && <AwardRibbon label={award} />}
+      {inProgress && (
+        <span className="pointer-events-none absolute top-2 left-2 z-10 flex items-center gap-1.5 rounded-full bg-black/70 px-2 py-0.5 text-[11px] font-medium text-white backdrop-blur-sm">
+          <span className="size-1.5 rounded-full bg-amber-400 animate-pulse" aria-hidden />
+          In progress
+        </span>
+      )}
       <a
         href={detailHref}
         {...(!isInternal && { target: "_blank", rel: "noopener noreferrer" })}
