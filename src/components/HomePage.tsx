@@ -24,8 +24,8 @@ import {
   HERO_PAUSE_BEFORE_SUFFIX,
   HERO_PAUSE_BEFORE_SUFFIX_BACKSPACE,
   HERO_TEXT,
-  HERO_MISTYPE,
-  HERO_MISTYPE_KEEP_LENGTH,
+  HERO_GREETING,
+  HERO_GREETING_KEEP_LENGTH,
   HERO_SUFFIX,
 } from "@/lib/hero-timing";
 
@@ -264,8 +264,8 @@ export default function HomePage({ posts }: { posts: BlogPost[] }) {
                 <TypewriterText
                   className="text-3xl font-semibold tracking-tighter sm:text-4xl lg:text-5xl"
                   text={HERO_TEXT}
-                  mistype={HERO_MISTYPE}
-                  mistypeKeepLength={HERO_MISTYPE_KEEP_LENGTH}
+                  mistype={HERO_GREETING}
+                  mistypeKeepLength={HERO_GREETING_KEEP_LENGTH}
                   suffix={HERO_SUFFIX}
                   speed={HERO_TYPE_SPEED}
                   backspaceSpeed={HERO_BACKSPACE_SPEED}
