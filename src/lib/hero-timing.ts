@@ -15,9 +15,9 @@ export const HERO_TEXT = `Hi, I'm ${firstName}`;
 // this always reads the visitor's clock rather than the server's.
 function computeGreeting(): string {
   const hour = new Date().getHours();
-  if (hour >= 5 && hour < 12) return "Good morning";
-  if (hour >= 12 && hour < 18) return "Good afternoon";
-  return "Good evening";
+  if (hour >= 5 && hour < 12) return "Good morning!";
+  if (hour >= 12 && hour < 18) return "Good afternoon!";
+  return "Good evening!";
 }
 
 // Typed first, then fully erased before "Hi, I'm ..." is typed in its place.
@@ -25,7 +25,6 @@ export const HERO_GREETING = computeGreeting();
 export const HERO_GREETING_KEEP_LENGTH = 0;
 export const HERO_SUFFIX = "";
 
-const SETTLE_BUFFER = 450; // ms after typing finishes before the rest of the page reveals
 const SKIP_SETTLE_BUFFER = 80; // ms buffer used when the intro is skipped
 
 function computeShouldPlayIntro(): boolean {
@@ -47,22 +46,16 @@ function computeShouldPlayIntro(): boolean {
 // this session, false when navigating back to "/" from elsewhere on the site.
 export const HERO_PLAY_INTRO = computeShouldPlayIntro();
 
-const HERO_TYPE_DURATION_MS = HERO_PLAY_INTRO
+// Time until the greeting is erased and "Hi, I'm ..." starts typing.
+const HERO_GREETING_DURATION_MS = HERO_PLAY_INTRO
   ? HERO_TYPE_START_DELAY +
     HERO_GREETING.length * HERO_TYPE_SPEED +
     HERO_PAUSE_BEFORE_BACKSPACE +
     (HERO_GREETING.length - HERO_GREETING_KEEP_LENGTH) * HERO_BACKSPACE_SPEED +
-    HERO_PAUSE_BEFORE_RETYPE +
-    (HERO_TEXT.length - HERO_GREETING_KEEP_LENGTH) * HERO_TYPE_SPEED +
-    (HERO_SUFFIX
-      ? HERO_PAUSE_BEFORE_SUFFIX +
-        HERO_SUFFIX.length * HERO_TYPE_SPEED +
-        HERO_PAUSE_BEFORE_SUFFIX_BACKSPACE +
-        HERO_SUFFIX.length * HERO_BACKSPACE_SPEED
-      : 0)
+    HERO_PAUSE_BEFORE_RETYPE
   : 0;
 
 // Seconds after which the rest of the page (avatar included) should begin
-// its reveal, timed to start just after the hero name finishes typing out.
+// its reveal, timed so it fades in alongside the name as it types out.
 export const HERO_REVEAL_DELAY =
-  (HERO_TYPE_DURATION_MS + (HERO_PLAY_INTRO ? SETTLE_BUFFER : SKIP_SETTLE_BUFFER)) / 1000;
+  (HERO_GREETING_DURATION_MS + (HERO_PLAY_INTRO ? 0 : SKIP_SETTLE_BUFFER)) / 1000;
