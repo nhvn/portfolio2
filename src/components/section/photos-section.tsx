@@ -20,10 +20,26 @@ const MAX_ROW_STRETCH = 1.35;
 
 const SLIDE_TRANSITION = { duration: 0.55, ease: [0.32, 0.72, 0, 1] as const };
 const SNAP_TRANSITION = { duration: 0 };
-// Blocks rapid re-clicks from queueing up multiple page changes; a bit
-// longer than the slide duration so the next click only lands once the
+// Both pages ride the same underdamped spring, so the incoming one slides a
+// touch past its resting spot and recoils back instead of stopping dead.
+// The outgoing page must use the identical spring — on a different curve
+// the two pages drift apart mid-slide and the old one unmounts while the
+// new one is still recoiling, which reads as a hiccup at the end. Its own
+// overshoot happens off-screen, so it's invisible.
+const RECOIL_TRANSITION = { type: "spring", duration: 0.75, bounce: 0.3 } as const;
+
+// Blocks rapid re-clicks from queueing up multiple page changes; long
+// enough for the recoil to mostly settle so the next click only lands once the
 // animation has fully settled, not right as it's finishing.
-const CLICK_COOLDOWN_MS = 750;
+const CLICK_COOLDOWN_MS = 900;
+
+// The gallery only ever shows photos ~200px tall, so it loads downscaled
+// copies from /photos/thumbs (max 640px) instead of the multi-MB originals.
+// Decoding a 3000px+ JPEG mid-slide was what made page changes stutter.
+// Regenerate with: cd public/photos && sips -Z 640 <file> --out thumbs/<file>
+function thumbSrc(src: string) {
+  return src.replace("/photos/", "/photos/thumbs/");
+}
 
 type Row = { items: { photo: Photo; width: number }[]; height: number };
 
@@ -157,23 +173,16 @@ export default function PhotosSection() {
 
   const rows = pageGroups[page] ?? [];
 
-  // The stutter on click wasn't the transition itself — it was the browser
-  // decoding a handful of brand-new <img> elements for the first time at
-  // the exact moment the slide animation started. Warming the next page's
-  // images in the background as soon as the current one settles means
-  // they're already decoded and cached by the time a click actually swaps
-  // pages in.
+  // Thumbnails are small, so warm (fetch + decode) every page's images up
+  // front — by the time a click swaps pages in, nothing new has to be
+  // decoded while the slide animation is running.
   useEffect(() => {
-    if (totalPages <= 1) return;
-    const nextPage = (page + 1) % totalPages;
-    const nextRows = pageGroups[nextPage] ?? [];
-    nextRows.forEach((row) => {
-      row.items.forEach(({ photo }) => {
-        const img = new Image();
-        img.src = photo.src;
-      });
+    photos.forEach((photo) => {
+      const img = new Image();
+      img.src = thumbSrc(photo.src);
+      img.decode?.().catch(() => {});
     });
-  }, [page, pageGroups, totalPages]);
+  }, [photos]);
 
   const goNext = () => {
     if (onCooldownRef.current) return;
@@ -198,20 +207,21 @@ export default function PhotosSection() {
           key={page}
           onHeightChange={setHeight}
           initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
-          transition={SLIDE_TRANSITION}
+          animate={{ x: "0%", transition: RECOIL_TRANSITION }}
+          exit={{ x: "-100%", transition: RECOIL_TRANSITION }}
           onClick={totalPages > 1 ? goNext : undefined}
-          className={`absolute inset-x-0 top-0 flex flex-col ${totalPages > 1 ? "cursor-pointer" : ""}`}
-          style={{ gap: GAP_PX }}
+          className={`absolute inset-x-0 top-0 flex flex-col select-none ${totalPages > 1 ? "cursor-pointer" : ""}`}
+          style={{ gap: GAP_PX, willChange: "transform" }}
         >
           {rows.map((row, i) => (
             <div key={i} className="flex" style={{ gap: GAP_PX, height: row.height }}>
               {row.items.map(({ photo, width }) => (
                 <img
                   key={photo.src}
-                  src={photo.src}
+                  src={thumbSrc(photo.src)}
                   alt={photo.alt}
+                  decoding="async"
+                  draggable={false}
                   className="rounded-[12px] object-cover"
                   style={{ width, height: row.height }}
                 />

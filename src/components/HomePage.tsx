@@ -242,6 +242,25 @@ export default function HomePage({ posts }: { posts: BlogPost[] }) {
   // nothing native can jump the page, let the just-loaded home page paint
   // for a beat, then scroll there ourselves so it's an actual, visible
   // scroll down from the top.
+  // While the "Good morning!" intro types out, everything below the hero is
+  // still invisible, so scrolling would just reveal an empty page. Pin the
+  // page to the top and lock scrolling until the rest of the page starts
+  // fading in. Skipped for /#section links so those can still scroll there.
+  React.useEffect(() => {
+    if (!HERO_PLAY_INTRO || window.location.hash) return;
+    const root = document.documentElement;
+    history.scrollRestoration = "manual";
+    window.scrollTo({ top: 0, behavior: "instant" });
+    root.style.overflow = "hidden";
+    const timer = setTimeout(() => {
+      root.style.overflow = "";
+    }, HERO_REVEAL_DELAY * 1000);
+    return () => {
+      clearTimeout(timer);
+      root.style.overflow = "";
+    };
+  }, []);
+
   React.useEffect(() => {
     const hash = window.location.hash;
     if (!hash) return;
